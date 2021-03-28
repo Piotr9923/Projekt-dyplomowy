@@ -1,21 +1,29 @@
 package SerwisKomputerowy.controllers;
 
 import SerwisKomputerowy.entity.Role;
+import SerwisKomputerowy.entity.Staff;
 import SerwisKomputerowy.entity.User;
+import SerwisKomputerowy.model.StaffForm;
 import SerwisKomputerowy.repository.RoleRepository;
+import SerwisKomputerowy.repository.StaffRepository;
 import SerwisKomputerowy.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("/admin")
 @RestController
+@CrossOrigin
 public class AdminController {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
+    private StaffRepository staffRepository;
 
-    public AdminController(UserRepository userRepository, RoleRepository roleRepository) {
+    public AdminController(UserRepository userRepository, RoleRepository roleRepository, StaffRepository staffRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.staffRepository = staffRepository;
     }
 
     @GetMapping
@@ -23,12 +31,51 @@ public class AdminController {
         return "test";
     }
 
-    @PostMapping("/user")
-    public String createUser(@RequestBody User user){
+    @PostMapping("/staff")
+    public Staff createUser(@RequestBody StaffForm form){
 
-        User u = userRepository.save(user);
+        if(roleRepository.existsByName("STAFF")==false){
+            Role role = new Role();
+            role.setName("STAFF");
+            roleRepository.save(role);
+        }
 
-        return "Utworzono";
+        Role staffRole = roleRepository.getByName("STAFF");
+
+        User userToCreate = form.getUser();
+        userToCreate.addRole(staffRole);
+
+        User createdUser = userRepository.save(userToCreate);
+
+        form.setUserId(createdUser.getId());
+
+        Staff staffToCreate = form.getStaff();
+
+        staffRepository.save(staffToCreate);
+
+        return staffToCreate;
+    }
+
+    @GetMapping("/staff")
+    public List<Staff> getStaff(){
+        return staffRepository.findAll();
+    }
+
+    @GetMapping("/staff/{id}")
+    public StaffForm getStaff(@PathVariable int id){
+        StaffForm staffForm = new StaffForm();
+        Staff staff = staffRepository.getStaffByUserId(id);
+        User user=null;
+        if(staff!=null) {
+            user = userRepository.getById(staff.getUserId());
+        }
+
+        if(staff!=null && user!=null) {
+            staffForm.setDataFromUser(user);
+            staffForm.setDataFromStaff(staff);
+            return staffForm;
+        }
+        return null;
     }
 
     @PostMapping("/role")

@@ -10,6 +10,7 @@ public class Staff {
     private int id;
 
     @Column
+
     private int userId;
 
     @Column
