@@ -1,14 +1,20 @@
 package SerwisKomputerowy.controllers;
 
+import SerwisKomputerowy.entity.Announcement;
 import SerwisKomputerowy.entity.Role;
 import SerwisKomputerowy.entity.Staff;
 import SerwisKomputerowy.entity.User;
+import SerwisKomputerowy.model.AnnouncementForm;
 import SerwisKomputerowy.model.StaffForm;
+import SerwisKomputerowy.repository.AnnouncementRepository;
 import SerwisKomputerowy.repository.RoleRepository;
 import SerwisKomputerowy.repository.StaffRepository;
 import SerwisKomputerowy.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.util.Date;
 import java.util.List;
 
 @RequestMapping("/admin")
@@ -19,20 +25,22 @@ public class AdminController {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private StaffRepository staffRepository;
+    private AnnouncementRepository announcementRepository;
 
-    public AdminController(UserRepository userRepository, RoleRepository roleRepository, StaffRepository staffRepository) {
+    public AdminController(UserRepository userRepository, RoleRepository roleRepository, StaffRepository staffRepository, AnnouncementRepository announcementRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.staffRepository = staffRepository;
+        this.announcementRepository = announcementRepository;
     }
 
     @GetMapping
     public String showDashboard(){
-        return "test";
+        return "Strona główna";
     }
 
     @PostMapping("/staff")
-    public Staff createUser(@RequestBody StaffForm form){
+    public ResponseEntity<Staff> createStaff(@RequestBody StaffForm form){
 
         if(roleRepository.existsByName("STAFF")==false){
             Role role = new Role();
@@ -51,74 +59,126 @@ public class AdminController {
 
         Staff staffToCreate = form.getStaff();
 
-        staffRepository.save(staffToCreate);
+        Staff createdStaff = staffRepository.save(staffToCreate);
 
-        return staffToCreate;
+        return ResponseEntity.created(URI.create("/admin/staff/"+createdStaff.getId())).build();
+    }
+
+    @PutMapping("/staff")
+    public ResponseEntity<?> updateStaff(@RequestBody StaffForm form){
+
+        Staff updatedStaff = staffRepository.getStaffById(form.getStaffId());
+        User updatedUser = userRepository.getById(form.getUserId());
+
+        if(updatedStaff==null || updatedStaff==null){
+            return ResponseEntity.notFound().build();
+        }
+
+        if(form.getUsername()!=null){
+            updatedUser.setUsername(form.getUsername());
+        }
+        if(form.getPassword()!=null){
+            updatedUser.setUsername(form.getUsername());
+        }
+
+        userRepository.save(updatedUser);
+
+
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/staff")
-    public List<Staff> getStaff(){
-        return staffRepository.findAll();
+    public ResponseEntity<List<Staff>> getStaff(){
+        return ResponseEntity.ok(staffRepository.findAll());
     }
 
     @GetMapping("/staff/{id}")
-    public StaffForm getStaff(@PathVariable int id){
+    public ResponseEntity<StaffForm> getStaff(@PathVariable int id){
         StaffForm staffForm = new StaffForm();
         Staff staff = staffRepository.getStaffByUserId(id);
         User user=null;
         if(staff!=null) {
             user = userRepository.getById(staff.getUserId());
         }
-
         if(staff!=null && user!=null) {
             staffForm.setDataFromUser(user);
             staffForm.setDataFromStaff(staff);
-            return staffForm;
+            return ResponseEntity.ok(staffForm);
         }
-        return null;
+
+        return ResponseEntity.notFound().build();
     }
+
+    @DeleteMapping("/staff/{id}")
+    public ResponseEntity<?> deleteStaff(@PathVariable int id){
+
+        staffRepository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
 
     @PostMapping("/role")
-    public String createRole(@RequestBody Role role){
+    public ResponseEntity<?> createRole(@RequestBody Role role){
 
-        Role r = roleRepository.save(role);
+        Role createdRole = roleRepository.save(role);
 
-        return "Utworzono";
-    }
-
-    @GetMapping("/role/{name}")
-    public Role getRole(@PathVariable String name){
-
-       return roleRepository.getByName(name);
+        return ResponseEntity.created(URI.create("/admin/role/"+createdRole.getId())).build();
     }
 
     @GetMapping("/user/{id}")
-    public User getUser(@PathVariable int id){
+    public ResponseEntity<User> getUser(@PathVariable int id){
 
-        User u = userRepository.getById(id);
-
-        return u;
-    }
-
-    @PostMapping("/user/{id}/add/{name}")
-    public User addUserRole(@PathVariable int id, @PathVariable String name){
-
-        User u = userRepository.getById(id);
-
-        if(roleRepository.existsByName(name)==false){
-            Role role = new Role();
-            role.setName(name);
-            roleRepository.save(role);
+        if(userRepository.existsById(id)==false){
+            return ResponseEntity.notFound().build();
         }
 
-        Role r = roleRepository.getByName(name);
+        User user = userRepository.getById(id);
 
-        u.addRole(r);
-
-        userRepository.save(u);
-
-        return u;
+        return ResponseEntity.ok(user);
     }
 
+    @GetMapping("/announcement/{id}")
+    public ResponseEntity<Announcement> getAnnouncement(@PathVariable int id){
+
+        return ResponseEntity.ok(announcementRepository.getById(id));
+    }
+
+    @GetMapping("/announcement")
+    public ResponseEntity<List<Announcement>> getAllAnnouncements(){
+
+        return ResponseEntity.ok(announcementRepository.findAll());
+    }
+
+    @PostMapping("/announcement")
+    public ResponseEntity<?> createAnnouncement(@RequestBody AnnouncementForm form){
+
+        Announcement announcementToCreate = new Announcement();
+        announcementToCreate.setText(form.getText());
+        announcementToCreate.setTitle(form.getTitle());
+        announcementToCreate.setDate(new Date());
+
+        Role role;
+
+        for(int i=0;i<form.getRoles().size();i++){
+            System.out.println(form.getRoles().get(i)+"   id " +i);
+            if(roleRepository.existsByName(form.getRoles().get(i))) {
+                role = roleRepository.getByName(form.getRoles().get(i));
+                announcementToCreate.addRole(role);
+            }
+        }
+
+        Announcement created = announcementRepository.save(announcementToCreate);
+
+        return ResponseEntity.created(URI.create("/admin/announcement/"+created.getId())).build();
+    }
+
+    @DeleteMapping("annoucement/{id}")
+    public ResponseEntity<?> deleteAnnouncement(@PathVariable int id){
+
+        announcementRepository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
+    }
 
 }
