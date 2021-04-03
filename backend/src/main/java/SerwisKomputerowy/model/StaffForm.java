@@ -2,25 +2,31 @@ package SerwisKomputerowy.model;
 
 import SerwisKomputerowy.entity.Staff;
 import SerwisKomputerowy.entity.User;
+import net.minidev.json.annotate.JsonIgnore;
+import org.springframework.format.annotation.NumberFormat;
+
+import javax.validation.constraints.*;
 
 public class StaffForm {
 
     private int userId;
-
+    @NotEmpty(message = "Musisz podać nazwę użytkownika!")
     private String username;
-
+    @NotEmpty(message = "Musisz podać hasło!")
     private String password;
 
     private int staffId;
-
+    @NotBlank(message = "Musisz podać imię!")
     private String firstname;
-
+    @NotBlank(message = "Musisz podać nazwisko!")
     private String lastname;
-
+    @NotBlank(message = "Musisz podać numer telefonu!")
+    @Pattern(regexp="(^$|[0-9]{9})",message = "Błędny format numeru telefonu!")
     private String phoneNumber;
-
+    @NotBlank(message = "Musisz podać adres email!")
+    @Email(message = "Błędny format adresu e-mail")
     private String email;
-
+    @Min(value = 1,message = "Wysokość wynagrodzenia musi wynosić minimum 1!")
     private int salary;
 
     public StaffForm(int userId, String username, String password, int staffId, String firstname, String lastname, String phoneNumber, String email, int salary) {
@@ -110,10 +116,12 @@ public class StaffForm {
         this.salary = salary;
     }
 
+    @JsonIgnore
     public User getUser(){
         return new User(userId,username,password);
     }
 
+    @JsonIgnore
     public Staff getStaff(){
         return new Staff(staffId, userId, firstname, lastname, phoneNumber, email, salary);
     }

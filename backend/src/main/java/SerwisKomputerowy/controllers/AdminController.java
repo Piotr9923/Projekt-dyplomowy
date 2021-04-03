@@ -10,12 +10,16 @@ import SerwisKomputerowy.repository.AnnouncementRepository;
 import SerwisKomputerowy.repository.RoleRepository;
 import SerwisKomputerowy.repository.StaffRepository;
 import SerwisKomputerowy.repository.UserRepository;
+import net.minidev.json.JSONArray;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RequestMapping("/admin")
 @RestController
@@ -27,6 +31,10 @@ public class AdminController {
     private StaffRepository staffRepository;
     private AnnouncementRepository announcementRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
     public AdminController(UserRepository userRepository, RoleRepository roleRepository, StaffRepository staffRepository, AnnouncementRepository announcementRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -34,13 +42,18 @@ public class AdminController {
         this.announcementRepository = announcementRepository;
     }
 
-    @GetMapping
-    public String showDashboard(){
-        return "Strona główna";
-    }
-
     @PostMapping("/staff")
-    public ResponseEntity<Staff> createStaff(@RequestBody StaffForm form){
+    public ResponseEntity createStaff(@RequestBody @Valid StaffForm form, Errors errors){
+
+        if(errors.hasErrors()){
+            List<String> errorsList = new ArrayList<>();
+            for(int i=0;i<errors.getErrorCount();i++){
+                errorsList.add(errors.getAllErrors().get(i).getDefaultMessage());
+            }
+            Map<String,List<String>> formErrors = new HashMap<String,List<String>>();
+            formErrors.put("errors",errorsList);
+            return ResponseEntity.badRequest().body(formErrors);
+        }
 
         if(roleRepository.existsByName("STAFF")==false){
             Role role = new Role();
@@ -65,7 +78,17 @@ public class AdminController {
     }
 
     @PutMapping("/staff")
-    public ResponseEntity<?> updateStaff(@RequestBody StaffForm form){
+    public ResponseEntity<?> updateStaff(@RequestBody @Valid StaffForm form, Errors errors){
+
+        if(errors.hasErrors()){
+            List<String> errorsList = new ArrayList<>();
+            for(int i=0;i<errors.getErrorCount();i++){
+                errorsList.add(errors.getAllErrors().get(i).getDefaultMessage());
+            }
+            Map<String,List<String>> formErrors = new HashMap<String,List<String>>();
+            formErrors.put("errors",errorsList);
+            return ResponseEntity.badRequest().body(formErrors);
+        }
 
         Staff updatedStaff = staffRepository.getStaffById(form.getStaffId());
         User updatedUser = userRepository.getById(form.getUserId());
@@ -78,11 +101,26 @@ public class AdminController {
             updatedUser.setUsername(form.getUsername());
         }
         if(form.getPassword()!=null){
-            updatedUser.setUsername(form.getUsername());
+            updatedUser.setPassword(form.getPassword());
+        }
+        if(form.getFirstname()!=null){
+            updatedStaff.setFirstname(form.getFirstname());
+        }
+        if(form.getLastname()!=null){
+            updatedStaff.setLastname(form.getLastname());
+        }
+        if(form.getEmail()!=null){
+            updatedStaff.setEmail(form.getEmail());
+        }
+        if(form.getPhoneNumber()!=null){
+            updatedStaff.setPhoneNumber(form.getPhoneNumber());
+        }
+        if(form.getSalary()>0){
+            updatedStaff.setSalary(form.getSalary());
         }
 
         userRepository.save(updatedUser);
-
+        staffRepository.save(updatedStaff);
 
         return ResponseEntity.noContent().build();
     }
@@ -117,15 +155,6 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
-
-    @PostMapping("/role")
-    public ResponseEntity<?> createRole(@RequestBody Role role){
-
-        Role createdRole = roleRepository.save(role);
-
-        return ResponseEntity.created(URI.create("/admin/role/"+createdRole.getId())).build();
-    }
-
     @GetMapping("/user/{id}")
     public ResponseEntity<User> getUser(@PathVariable int id){
 
@@ -138,12 +167,6 @@ public class AdminController {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/announcement/{id}")
-    public ResponseEntity<Announcement> getAnnouncement(@PathVariable int id){
-
-        return ResponseEntity.ok(announcementRepository.getById(id));
-    }
-
     @GetMapping("/announcement")
     public ResponseEntity<List<Announcement>> getAllAnnouncements(){
 
@@ -151,7 +174,17 @@ public class AdminController {
     }
 
     @PostMapping("/announcement")
-    public ResponseEntity<?> createAnnouncement(@RequestBody AnnouncementForm form){
+    public ResponseEntity<?> createAnnouncement(@RequestBody @Valid AnnouncementForm form, Errors errors){
+
+        if(errors.hasErrors()){
+            List<String> errorsList = new ArrayList<>();
+            for(int i=0;i<errors.getErrorCount();i++){
+                errorsList.add(errors.getAllErrors().get(i).getDefaultMessage());
+            }
+            Map<String,List<String>> formErrors = new HashMap<String,List<String>>();
+            formErrors.put("errors",errorsList);
+            return ResponseEntity.badRequest().body(formErrors);
+        }
 
         Announcement announcementToCreate = new Announcement();
         announcementToCreate.setText(form.getText());
@@ -173,12 +206,20 @@ public class AdminController {
         return ResponseEntity.created(URI.create("/admin/announcement/"+created.getId())).build();
     }
 
-    @DeleteMapping("annoucement/{id}")
+    @GetMapping("/announcement/{id}")
+    public ResponseEntity<Announcement> getAnnouncement(@PathVariable int id){
+
+        return ResponseEntity.ok(announcementRepository.getById(id));
+    }
+
+    @DeleteMapping("/announcement/{id}")
     public ResponseEntity<?> deleteAnnouncement(@PathVariable int id){
 
         announcementRepository.deleteById(id);
 
         return ResponseEntity.noContent().build();
     }
+
+
 
 }

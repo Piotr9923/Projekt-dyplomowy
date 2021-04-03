@@ -3,7 +3,7 @@ package SerwisKomputerowy.entity;
 import javax.persistence.*;
 
 @Entity(name = "home_crash")
-public class HomeCrash{
+public class HomeComputerCrash {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,10 +36,10 @@ public class HomeCrash{
     @Column
     private double cost;
 
-    public HomeCrash() {
+    public HomeComputerCrash() {
     }
 
-    public HomeCrash(int id, int clientId, String city, String code, String address, String status, String title, String description, String crashMessage, double cost) {
+    public HomeComputerCrash(int id, int clientId, String city, String code, String address, String status, String title, String description, String crashMessage, double cost) {
         this.id = id;
         this.clientId = clientId;
         this.city = city;

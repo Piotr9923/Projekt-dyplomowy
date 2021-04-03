@@ -1,11 +1,14 @@
 package SerwisKomputerowy.model;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 
 public class AnnouncementForm {
 
+    @NotBlank(message = "Musisz podać tytuł ogłoszenia!")
     private String title;
+    @NotBlank(message = "Musisz podać tekst ogłoszenia!")
     private String text;
     private Date date;
     List<String> roles;
