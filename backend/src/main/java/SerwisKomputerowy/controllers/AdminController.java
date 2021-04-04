@@ -13,6 +13,7 @@ import SerwisKomputerowy.repository.UserRepository;
 import net.minidev.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -66,6 +67,8 @@ public class AdminController {
         User userToCreate = form.getUser();
         userToCreate.addRole(staffRole);
 
+        //TODO: Hashowanie hasła
+
         User createdUser = userRepository.save(userToCreate);
 
         form.setUserId(createdUser.getId());
@@ -88,6 +91,13 @@ public class AdminController {
             Map<String,List<String>> formErrors = new HashMap<String,List<String>>();
             formErrors.put("errors",errorsList);
             return ResponseEntity.badRequest().body(formErrors);
+        }
+
+        if(userRepository.existsByUsername(form.getUsername())){
+            Map<String,String> userExistsError = new HashMap<String,String>();
+            userExistsError.put("errors","Użytkownik o takiej nazwie istnieje");
+            return ResponseEntity.badRequest().body(userExistsError);
+
         }
 
         Staff updatedStaff = staffRepository.getStaffById(form.getStaffId());
