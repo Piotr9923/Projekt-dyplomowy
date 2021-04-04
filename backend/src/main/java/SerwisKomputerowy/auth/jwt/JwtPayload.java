@@ -12,6 +12,7 @@ public class JwtPayload {
 
     private List<String> roles;
 
+
     public JwtPayload() {
         roles = new ArrayList<String>();
     }

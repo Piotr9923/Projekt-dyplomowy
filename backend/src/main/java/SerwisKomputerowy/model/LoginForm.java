@@ -1,9 +1,12 @@
 package SerwisKomputerowy.model;
 
+import javax.validation.constraints.NotBlank;
+
 public class LoginForm {
 
+    @NotBlank(message = "Musisz podać nazwę użytkownika!")
     private String username;
-
+    @NotBlank(message = "Musisz podać hasło!")
     private String password;
 
     public LoginForm(String username, String password) {
