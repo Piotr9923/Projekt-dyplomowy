@@ -3,6 +3,7 @@ package SerwisKomputerowy.auth.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import org.aspectj.bridge.IMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,6 +37,7 @@ public class JwtFilter extends BasicAuthenticationFilter {
             PreAuthenticatedAuthenticationToken authResult = getAuthenticationByToken(header);
             SecurityContextHolder.getContext().setAuthentication(authResult);
         }
+
         chain.doFilter(request, response);
     }
 
@@ -63,7 +65,6 @@ public class JwtFilter extends BasicAuthenticationFilter {
                     = new PreAuthenticatedAuthenticationToken(username, null, simpleGrantedAuthorities);
             return auth;
         }catch (Exception e){
-        System.out.println(e.fillInStackTrace());
             return null;
         }
     }

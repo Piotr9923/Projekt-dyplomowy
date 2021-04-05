@@ -10,9 +10,9 @@ import javax.validation.constraints.*;
 public class StaffForm {
 
     private int userId;
-    @NotEmpty(message = "Musisz podać nazwę użytkownika!")
+    @NotBlank(message = "Musisz podać nazwę użytkownika!")
     private String username;
-    @NotEmpty(message = "Musisz podać hasło!")
+    @NotBlank(message = "Musisz podać hasło!")
     private String password;
 
     private int staffId;

@@ -9,4 +9,6 @@ public interface ClientRepository extends CrudRepository<Client,Integer> {
 
     public Client getClientByUserId(int userId);
 
+    public Client save(Client client);
+
 }

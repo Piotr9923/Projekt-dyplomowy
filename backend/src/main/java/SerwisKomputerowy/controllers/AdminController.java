@@ -94,8 +94,10 @@ public class AdminController {
         }
 
         if(userRepository.existsByUsername(form.getUsername())){
-            Map<String,String> userExistsError = new HashMap<String,String>();
-            userExistsError.put("errors","Użytkownik o takiej nazwie istnieje");
+            List<String> errorsList = new ArrayList<>();
+            errorsList.add("Użytkownik o takiej nazwie już istnieje!");
+            Map<String,List<String>> userExistsError = new HashMap<String,List<String>>();
+            userExistsError.put("errors",errorsList);
             return ResponseEntity.badRequest().body(userExistsError);
 
         }

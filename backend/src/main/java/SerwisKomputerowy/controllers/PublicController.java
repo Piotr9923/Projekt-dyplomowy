@@ -2,14 +2,18 @@ package SerwisKomputerowy.controllers;
 
 
 import SerwisKomputerowy.auth.jwt.JwtUtil;
+import SerwisKomputerowy.entity.Client;
 import SerwisKomputerowy.entity.Role;
 import SerwisKomputerowy.entity.User;
 import SerwisKomputerowy.auth.jwt.JwtPayload;
 import SerwisKomputerowy.auth.jwt.JwtResponse;
 import SerwisKomputerowy.model.LoginForm;
+import SerwisKomputerowy.model.RegistrationForm;
+import SerwisKomputerowy.repository.ClientRepository;
 import SerwisKomputerowy.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,13 +27,18 @@ import java.util.Map;
 @RestController
 public class PublicController {
 
-    private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     JwtUtil jwtUtil;
 
-    public PublicController(UserRepository userRepository) {
+    private UserRepository userRepository;
+    private ClientRepository clientRepository;
+
+    public PublicController(UserRepository userRepository, ClientRepository clientRepository) {
         this.userRepository = userRepository;
+        this.clientRepository = clientRepository;
     }
 
     @GetMapping
@@ -74,5 +83,44 @@ public class PublicController {
         return ResponseEntity.ok().body(new JwtResponse(token,user.getUsername(),roles));
     }
 
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@RequestBody @Valid RegistrationForm form, Errors errors){
+
+        if(errors.hasErrors()){
+            List<String> errorsList = new ArrayList<>();
+            for(int i=0;i<errors.getErrorCount();i++){
+                errorsList.add(errors.getAllErrors().get(i).getDefaultMessage());
+            }
+            Map<String,List<String>> formErrors = new HashMap<String,List<String>>();
+            formErrors.put("errors",errorsList);
+            return ResponseEntity.badRequest().body(formErrors);
+        }
+
+        if(userRepository.existsByUsername(form.getUsername())){
+            List<String> errorsList = new ArrayList<>();
+            errorsList.add("Użytkownik o takiej nazwie już istnieje!");
+            Map<String,List<String>> userExistsError = new HashMap<String,List<String>>();
+            userExistsError.put("errors",errorsList);
+            return ResponseEntity.badRequest().body(userExistsError);
+        }
+
+        //TODO: Hashowanie hasła
+        User newUser = new User();
+        newUser.setUsername(form.getUsername());
+        newUser.setPassword(form.getPassword());
+
+        User createdUser = userRepository.save(newUser);
+
+        Client newClient = new Client();
+        newClient.setUserId(createdUser.getId());
+        newClient.setFirstname(form.getFirstname());
+        newClient.setLastname(form.getLastname());
+        newClient.setPhoneNumber(form.getPhoneNumber());
+        newClient.setEmail(form.getEmail());
+
+        Client created = clientRepository.save(newClient);
+        
+        return ResponseEntity.ok(created);
+    }
 
 }

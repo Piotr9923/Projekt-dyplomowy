@@ -1,12 +1,15 @@
 package SerwisKomputerowy.controllers;
 
+import SerwisKomputerowy.entity.Client;
 import SerwisKomputerowy.entity.HomeComputerCrash;
+import SerwisKomputerowy.entity.User;
 import SerwisKomputerowy.model.HomeCrashForm;
 import SerwisKomputerowy.repository.ClientRepository;
 import SerwisKomputerowy.repository.HomeCrashRepository;
 import SerwisKomputerowy.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +40,16 @@ public class ClientController {
         return "Zalogowano jako "+ user;
     }
 
+    @GetMapping("/home_crash")
+    public ResponseEntity<?> getHomeCrashes(){
+
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        int userId = userRepository.findByUsername(loggedUser).getId();
+        int clientId = clientRepository.getClientByUserId(userId).getId();
+
+        return ResponseEntity.ok(homeCrashRepository.getByClientId(clientId));
+    }
+
     @PostMapping("/home_crash")
     public ResponseEntity<?> addHomeCrash(@RequestBody @Valid HomeCrashForm form, Errors errors){
 
@@ -57,6 +70,7 @@ public class ClientController {
         newCrash.setTitle(form.getTitle());
         newCrash.setDescription(form.getDescription());
         newCrash.setDate(new Date());
+        newCrash.setStatus("ZGŁOSZONA");
         String loggedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 
         int userId = userRepository.findByUsername(loggedUser).getId();
@@ -67,4 +81,55 @@ public class ClientController {
 
         return ResponseEntity.created(URI.create("/home_crash/"+createdCrash.getId())).build();
     }
+
+    @DeleteMapping("/home_crash/{id}")
+    public ResponseEntity<?> deleteHomeCrash(@PathVariable int id){
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        Client loggedClient = clientRepository.getClientByUserId(userRepository.findByUsername(username).getId());
+
+        HomeComputerCrash computerCrash = homeCrashRepository.getById(id);
+
+        if(computerCrash==null || loggedClient.getId()!=computerCrash.getClientId()){
+            List<String> errorsList = new ArrayList<>();
+            errorsList.add("To nie jest Twoja awaria komputera!");
+            Map<String,List<String>> errors = new HashMap<String,List<String>>();
+            errors.put("errors",errorsList);
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        if(computerCrash.getStatus().equals("ZGŁOSZONA")==false){
+            List<String> errorsList = new ArrayList<>();
+            errorsList.add("Nie możesz usunąć tej awarii!");
+            Map<String,List<String>> errors = new HashMap<String,List<String>>();
+            errors.put("errors",errorsList);
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @GetMapping("home_crash/{id}")
+    public ResponseEntity<?> getHomeCrash(@PathVariable int id){
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        Client loggedClient = clientRepository.getClientByUserId(userRepository.findByUsername(username).getId());
+
+        HomeComputerCrash computerCrash = homeCrashRepository.getById(id);
+
+        if(computerCrash==null || loggedClient.getId()!=computerCrash.getClientId()){
+            List<String> errorsList = new ArrayList<>();
+            errorsList.add("To nie jest Twoja awaria komputera!");
+            Map<String,List<String>> errors = new HashMap<String,List<String>>();
+            errors.put("errors",errorsList);
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        return ResponseEntity.ok(computerCrash);
+    }
+
+
 }
