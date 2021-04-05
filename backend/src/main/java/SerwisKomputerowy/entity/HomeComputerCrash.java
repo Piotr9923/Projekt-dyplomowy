@@ -1,6 +1,7 @@
 package SerwisKomputerowy.entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity(name = "home_crash")
 public class HomeComputerCrash {
@@ -19,7 +20,7 @@ public class HomeComputerCrash {
     private String code;
 
     @Column
-    private String address;
+    private String street;
 
     @Column
     private String status;
@@ -31,6 +32,9 @@ public class HomeComputerCrash {
     private String description;
 
     @Column
+    private Date date;
+
+    @Column
     private String crashMessage;
 
     @Column
@@ -39,17 +43,26 @@ public class HomeComputerCrash {
     public HomeComputerCrash() {
     }
 
-    public HomeComputerCrash(int id, int clientId, String city, String code, String address, String status, String title, String description, String crashMessage, double cost) {
+    public HomeComputerCrash(int id, int clientId, String city, String code, String street, String status, String title, String description, Date date, String crashMessage, double cost) {
         this.id = id;
         this.clientId = clientId;
         this.city = city;
         this.code = code;
-        this.address = address;
+        this.street = street;
         this.status = status;
         this.title = title;
         this.description = description;
+        this.date = date;
         this.crashMessage = crashMessage;
         this.cost = cost;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public int getId() {
@@ -84,12 +97,12 @@ public class HomeComputerCrash {
         this.code = code;
     }
 
-    public String getAddress() {
-        return address;
+    public String getStreet() {
+        return street;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
     public String getStatus() {
