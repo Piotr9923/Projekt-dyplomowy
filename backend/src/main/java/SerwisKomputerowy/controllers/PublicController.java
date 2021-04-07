@@ -8,6 +8,7 @@ import SerwisKomputerowy.entity.User;
 import SerwisKomputerowy.auth.jwt.JwtPayload;
 import SerwisKomputerowy.auth.jwt.JwtResponse;
 import SerwisKomputerowy.model.LoginForm;
+import SerwisKomputerowy.model.RegistrationClientForm;
 import SerwisKomputerowy.model.RegistrationForm;
 import SerwisKomputerowy.repository.ClientRepository;
 import SerwisKomputerowy.repository.UserRepository;
@@ -18,6 +19,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -103,6 +105,23 @@ public class PublicController {
             userExistsError.put("errors",errorsList);
             return ResponseEntity.badRequest().body(userExistsError);
         }
+        if(clientRepository.existsByEmail(form.getEmail())){
+            List<String> errorsList = new ArrayList<>();
+            errorsList.add("Klient o takim adresie e-mail już istnieje w bazie! Zarejestruj się za pomocą formularz dla klientów!");
+            Map<String,List<String>> userExistsError = new HashMap<String,List<String>>();
+            userExistsError.put("errors",errorsList);
+            return ResponseEntity.badRequest().body(userExistsError);
+        }
+
+        if(clientRepository.existsByEmail(form.getEmail()) && clientRepository.getClientByEmail(form.getEmail()).getUserId()>0){
+
+            List<String> errorsList = new ArrayList<>();
+            Map<String,List<String>> formErrors = new HashMap<String,List<String>>();
+            errorsList.add("Istnieje użytkownik zarejestrowany na ten adres e-mail!");
+            formErrors.put("errors", errorsList);
+            return ResponseEntity.badRequest().body(formErrors);
+
+        }
 
         //TODO: Hashowanie hasła
         User newUser = new User();
@@ -119,8 +138,67 @@ public class PublicController {
         newClient.setEmail(form.getEmail());
 
         Client created = clientRepository.save(newClient);
-        
-        return ResponseEntity.ok(created);
+
+        return ResponseEntity.created(URI.create("")).build();
+    }
+
+
+    @PostMapping("/client_signup")
+    public ResponseEntity<?> signupClient(@RequestBody @Valid RegistrationClientForm form, Errors errors){
+
+        if(errors.hasErrors()){
+            List<String> errorsList = new ArrayList<>();
+            for(int i=0;i<errors.getErrorCount();i++){
+                errorsList.add(errors.getAllErrors().get(i).getDefaultMessage());
+            }
+            Map<String,List<String>> formErrors = new HashMap<String,List<String>>();
+            formErrors.put("errors",errorsList);
+            return ResponseEntity.badRequest().body(formErrors);
+        }
+
+        if(userRepository.existsByUsername(form.getUsername())){
+
+            List<String> errorsList = new ArrayList<>();
+            Map<String,List<String>> formErrors = new HashMap<String,List<String>>();
+            errorsList.add("Użytkownik o takiej nazwie już istnieje!!");
+            formErrors.put("errors", errorsList);
+            return ResponseEntity.badRequest().body(formErrors);
+
+        }
+
+        if(clientRepository.existsByEmail(form.getEmail())==false){
+
+            List<String> errorsList = new ArrayList<>();
+            Map<String,List<String>> formErrors = new HashMap<String,List<String>>();
+            errorsList.add("Klient o podanym adresie e-mail nie istnieje w bazie!");
+            formErrors.put("errors", errorsList);
+            return ResponseEntity.badRequest().body(formErrors);
+
+        }
+
+        if(clientRepository.getClientByEmail(form.getEmail()).getUserId()>0){
+
+            List<String> errorsList = new ArrayList<>();
+            Map<String,List<String>> formErrors = new HashMap<String,List<String>>();
+            errorsList.add("Istnieje użytkownik zarejestrowany na ten adres e-mail!");
+            formErrors.put("errors", errorsList);
+            return ResponseEntity.badRequest().body(formErrors);
+
+        }
+
+        //TODO: Hashowanie hasła
+        User newUser = new User();
+        newUser.setUsername(form.getUsername());
+        newUser.setPassword(form.getPassword());
+
+        User createdUser = userRepository.save(newUser);
+
+        Client client = clientRepository.getClientByEmail(form.getEmail());
+        client.setUserId(createdUser.getId());
+        clientRepository.save(client);
+
+
+        return ResponseEntity.created(URI.create("")).build();
     }
 
 }

@@ -20,6 +20,8 @@ public class JwtUtil {
 
     public String generateToken(Map<String,Object> data) {
 
+        //TODO: Czas ważności JWT
+
         Claims claims = Jwts.claims(data);
         long nowMillis = System.currentTimeMillis();
         return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512,jwtSecret.getBytes()).compact();

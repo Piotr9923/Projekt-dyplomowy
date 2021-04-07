@@ -1,10 +1,12 @@
 package SerwisKomputerowy.controllers;
 
 import SerwisKomputerowy.entity.Client;
+import SerwisKomputerowy.entity.ComputerCrash;
 import SerwisKomputerowy.entity.HomeComputerCrash;
 import SerwisKomputerowy.entity.User;
 import SerwisKomputerowy.model.HomeCrashForm;
 import SerwisKomputerowy.repository.ClientRepository;
+import SerwisKomputerowy.repository.ComputerCrashRepository;
 import SerwisKomputerowy.repository.HomeCrashRepository;
 import SerwisKomputerowy.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
@@ -25,19 +27,13 @@ public class ClientController {
     private ClientRepository clientRepository;
     private UserRepository userRepository;
     private HomeCrashRepository homeCrashRepository;
+    private ComputerCrashRepository computerCrashRepository;
 
-    public ClientController(ClientRepository clientRepository, UserRepository userRepository, HomeCrashRepository homeCrashRepository) {
+    public ClientController(ClientRepository clientRepository, UserRepository userRepository, HomeCrashRepository homeCrashRepository, ComputerCrashRepository computerCrashRepository) {
         this.clientRepository = clientRepository;
         this.userRepository = userRepository;
         this.homeCrashRepository = homeCrashRepository;
-    }
-
-    @GetMapping
-    public String showDashboard(){
-
-        String user = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-
-        return "Zalogowano jako "+ user;
+        this.computerCrashRepository = computerCrashRepository;
     }
 
     @GetMapping("/home_crash")
@@ -119,6 +115,36 @@ public class ClientController {
         Client loggedClient = clientRepository.getClientByUserId(userRepository.findByUsername(username).getId());
 
         HomeComputerCrash computerCrash = homeCrashRepository.getById(id);
+
+        if(computerCrash==null || loggedClient.getId()!=computerCrash.getClientId()){
+            List<String> errorsList = new ArrayList<>();
+            errorsList.add("To nie jest Twoja awaria komputera!");
+            Map<String,List<String>> errors = new HashMap<String,List<String>>();
+            errors.put("errors",errorsList);
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        return ResponseEntity.ok(computerCrash);
+    }
+
+    @GetMapping("/crash")
+    public ResponseEntity<?> getCrashes(){
+
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        int userId = userRepository.findByUsername(loggedUser).getId();
+        int clientId = clientRepository.getClientByUserId(userId).getId();
+
+        return ResponseEntity.ok(computerCrashRepository.getByClientId(clientId));
+    }
+
+    @GetMapping("crash/{id}")
+    public ResponseEntity<?> getComputerCrash(@PathVariable int id){
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        Client loggedClient = clientRepository.getClientByUserId(userRepository.findByUsername(username).getId());
+
+        ComputerCrash computerCrash = computerCrashRepository.getById(id);
 
         if(computerCrash==null || loggedClient.getId()!=computerCrash.getClientId()){
             List<String> errorsList = new ArrayList<>();
