@@ -11,6 +11,7 @@ import SerwisKomputerowy.model.LoginForm;
 import SerwisKomputerowy.model.RegistrationClientForm;
 import SerwisKomputerowy.model.RegistrationForm;
 import SerwisKomputerowy.repository.ClientRepository;
+import SerwisKomputerowy.repository.RoleRepository;
 import SerwisKomputerowy.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +38,12 @@ public class PublicController {
 
     private UserRepository userRepository;
     private ClientRepository clientRepository;
+    private RoleRepository roleRepository;
 
-    public PublicController(UserRepository userRepository, ClientRepository clientRepository) {
+    public PublicController(UserRepository userRepository, ClientRepository clientRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.clientRepository = clientRepository;
+        this.roleRepository = roleRepository;
     }
 
     @GetMapping
@@ -123,11 +126,18 @@ public class PublicController {
 
         }
 
+        if(roleRepository.existsByName("CLIENT")==false){
+            Role role = new Role();
+            role.setName("CLIENT");
+            roleRepository.save(role);
+        }
+        Role clientRole = roleRepository.getByName("CLIENT");
+
         //TODO: Hashowanie hasła
         User newUser = new User();
         newUser.setUsername(form.getUsername());
         newUser.setPassword(form.getPassword());
-
+        newUser.addRole(clientRole);
         User createdUser = userRepository.save(newUser);
 
         Client newClient = new Client();
@@ -186,10 +196,18 @@ public class PublicController {
 
         }
 
+        if(roleRepository.existsByName("CLIENT")==false){
+            Role role = new Role();
+            role.setName("CLIENT");
+            roleRepository.save(role);
+        }
+        Role clientRole = roleRepository.getByName("CLIENT");
+
         //TODO: Hashowanie hasła
         User newUser = new User();
         newUser.setUsername(form.getUsername());
         newUser.setPassword(form.getPassword());
+        newUser.addRole(clientRole);
 
         User createdUser = userRepository.save(newUser);
 
