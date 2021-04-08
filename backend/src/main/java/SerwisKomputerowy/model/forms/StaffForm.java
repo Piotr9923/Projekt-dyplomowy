@@ -1,4 +1,4 @@
-package SerwisKomputerowy.model;
+package SerwisKomputerowy.model.forms;
 
 import SerwisKomputerowy.entity.Staff;
 import SerwisKomputerowy.entity.User;

@@ -1,4 +1,4 @@
-package SerwisKomputerowy.model;
+package SerwisKomputerowy.model.forms;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

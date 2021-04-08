@@ -9,6 +9,9 @@ public interface ClientRepository extends CrudRepository<Client,Integer> {
 
     public Client getClientByUserId(int userId);
 
+    public Client getClientById(int id);
+
+
     public Client save(Client client);
 
     public Boolean existsByEmail(String email);

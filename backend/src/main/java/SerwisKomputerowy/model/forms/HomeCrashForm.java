@@ -1,4 +1,4 @@
-package SerwisKomputerowy.model;
+package SerwisKomputerowy.model.forms;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;

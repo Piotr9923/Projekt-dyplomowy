@@ -2,9 +2,12 @@ package SerwisKomputerowy.controllers;
 
 import SerwisKomputerowy.entity.Client;
 import SerwisKomputerowy.entity.ComputerCrash;
-import SerwisKomputerowy.model.ComputerCrashForm;
+import SerwisKomputerowy.entity.HomeComputerCrash;
+import SerwisKomputerowy.model.forms.ComputerCrashForm;
+import SerwisKomputerowy.model.response.ComputerCrashListResponse;
 import SerwisKomputerowy.repository.ClientRepository;
 import SerwisKomputerowy.repository.ComputerCrashRepository;
+import SerwisKomputerowy.repository.HomeCrashRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +23,12 @@ public class StaffController {
 
     private ClientRepository clientRepository;
     private ComputerCrashRepository computerCrashRepository;
+    public HomeCrashRepository homeCrashRepository;
 
-    public StaffController(ClientRepository clientRepository, ComputerCrashRepository computerCrashRepository) {
+    public StaffController(ClientRepository clientRepository, ComputerCrashRepository computerCrashRepository, HomeCrashRepository homeCrashRepository) {
         this.clientRepository = clientRepository;
         this.computerCrashRepository = computerCrashRepository;
+        this.homeCrashRepository = homeCrashRepository;
     }
 
     @PostMapping("/crash")
@@ -51,11 +56,8 @@ public class StaffController {
             if(form.getLastname()==null || form.getLastname().isBlank()){
                 errorsList.add("Musisz podać nazwisko klienta!");
             }
-            if(form.getEmail()==null || form.getEmail().isBlank()){
-                errorsList.add("Musisz podać email klienta!");
-            }
-            if(form.getPhoneNumber()==null || form.getPhoneNumber().isBlank()){
-                errorsList.add("Musisz podać numer telefonu klienta!");
+            if((form.getEmail()==null || form.getEmail().isBlank()) && (form.getPhoneNumber()==null || form.getPhoneNumber().isBlank())){
+                errorsList.add("Musisz podać adres email lub numer telefonu klienta!");
             }
             if(form.getEmail()!=null && clientRepository.existsByEmail(form.getEmail())){
                 errorsList.add("Klient o takim e-mailu już istnieje! Wybierz klienta z listy!!");
@@ -93,6 +95,7 @@ public class StaffController {
         crashToAdd.setTitle(form.getTitle());
         crashToAdd.setDescription(form.getDescription());
         crashToAdd.setDate(new Date());
+        crashToAdd.setStatus("PRZYJĘTA");
 
         ComputerCrash createdCrash = computerCrashRepository.save(crashToAdd);
 
@@ -100,6 +103,72 @@ public class StaffController {
 
     }
 
+    @GetMapping("/crash")
+    public ResponseEntity getCrashList(){
+
+        List<HomeComputerCrash> homeComputerCrashes = homeCrashRepository.findAll();
+        List<ComputerCrash> computerCrashes = computerCrashRepository.findAll();
+
+        List<ComputerCrashListResponse> crashes = new ArrayList<>();
+
+        for (HomeComputerCrash homeComputerCrash : homeComputerCrashes) {
+            String clientName = "";
+            if(clientRepository.existsById(homeComputerCrash.getClientId())){
+                clientName = clientRepository.getClientById(homeComputerCrash.getClientId()).toString();
+            }
+            crashes.add(new ComputerCrashListResponse
+                    (homeComputerCrash.getId(),
+                            homeComputerCrash.getTitle(),
+                            clientName,
+                            homeComputerCrash.getStatus(),
+                            "HOME",
+                            homeComputerCrash.getDate()));
+        }
+
+        for (ComputerCrash computerCrash : computerCrashes) {
+            String clientName = "";
+            if(clientRepository.existsById(computerCrash.getClientId())){
+                clientName = clientRepository.getClientById(computerCrash.getClientId()).toString();
+            }
+            crashes.add(
+                    new ComputerCrashListResponse(computerCrash.getId(),
+                            computerCrash.getTitle(),
+                            clientName,
+                            computerCrash.getStatus(),
+                            "SERVICE",
+                            computerCrash.getDate()));
+        }
+
+        return ResponseEntity.ok(crashes);
+    }
+
+    @GetMapping("/crash/{id]")
+    public ResponseEntity getCrash(@PathVariable int id){
+
+        if(computerCrashRepository.existsById(id)==false){
+            List<String> errorsList = new ArrayList<>();
+            errorsList.add("Awaria o takim id nie istnieje!");
+            Map<String,List<String>> errors = new HashMap<String,List<String>>();
+            errors.put("errors",errorsList);
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        return ResponseEntity.ok(computerCrashRepository.getById(id));
+    }
+
+    @GetMapping("/home_crash/{id]")
+    public ResponseEntity getHomeCrash(@PathVariable int id){
+
+        if(homeCrashRepository.existsById(id)==false){
+            List<String> errorsList = new ArrayList<>();
+            errorsList.add("Awaria o takim id nie istnieje!");
+            Map<String,List<String>> errors = new HashMap<String,List<String>>();
+            errors.put("errors",errorsList);
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        return ResponseEntity.ok(homeCrashRepository.getById(id));
+    }
 
 
 }

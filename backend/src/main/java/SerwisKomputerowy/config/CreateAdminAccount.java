@@ -10,7 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CommandLineAppStartupRunner implements CommandLineRunner {
+public class CreateAdminAccount implements CommandLineRunner {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
@@ -18,7 +18,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     @Value("${admin.password}")
     private String adminPassword;
 
-    public CommandLineAppStartupRunner(UserRepository userRepository, RoleRepository roleRepository) {
+    public CreateAdminAccount(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }

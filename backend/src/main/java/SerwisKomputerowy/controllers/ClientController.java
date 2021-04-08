@@ -3,15 +3,13 @@ package SerwisKomputerowy.controllers;
 import SerwisKomputerowy.entity.Client;
 import SerwisKomputerowy.entity.ComputerCrash;
 import SerwisKomputerowy.entity.HomeComputerCrash;
-import SerwisKomputerowy.entity.User;
-import SerwisKomputerowy.model.HomeCrashForm;
+import SerwisKomputerowy.model.forms.HomeCrashForm;
 import SerwisKomputerowy.repository.ClientRepository;
 import SerwisKomputerowy.repository.ComputerCrashRepository;
 import SerwisKomputerowy.repository.HomeCrashRepository;
 import SerwisKomputerowy.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 

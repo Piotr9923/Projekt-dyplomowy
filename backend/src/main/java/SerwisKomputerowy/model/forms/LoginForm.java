@@ -1,29 +1,17 @@
-package SerwisKomputerowy.model;
+package SerwisKomputerowy.model.forms;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-public class RegistrationClientForm {
+public class LoginForm {
 
     @NotBlank(message = "Musisz podać nazwę użytkownika!")
     private String username;
-
     @NotBlank(message = "Musisz podać hasło!")
     private String password;
 
-    @NotBlank(message = "Musisz podać adres e-mail!")
-    @Email(message = "Błędny format adresu e-mail!")
-    private String email;
-
-    public RegistrationClientForm() {
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public LoginForm(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
     public String getUsername() {
