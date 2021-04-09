@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.*;
 
-
+@CrossOrigin
 @RequestMapping("/client")
 @RestController
 public class ClientController {

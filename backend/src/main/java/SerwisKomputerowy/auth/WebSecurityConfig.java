@@ -12,11 +12,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().disable();
+
         http.authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/staff/**").hasRole("STAFF")
                 .antMatchers("/client/**").hasRole("CLIENT")
                 .and()
-                .addFilter(new JwtFilter(authenticationManager(), getApplicationContext().getEnvironment()));
+                .addFilter(new JwtFilter(authenticationManager(), getApplicationContext().getEnvironment())).cors();
     }
 }

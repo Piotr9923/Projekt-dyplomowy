@@ -53,6 +53,7 @@ public class PublicController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@RequestBody @Valid LoginForm form, Errors errors){
+        System.out.println("11111111111111");
 
         if(errors.hasErrors()){
             List<String> errorsList = new ArrayList<>();
@@ -63,16 +64,18 @@ public class PublicController {
             formErrors.put("errors",errorsList);
             return ResponseEntity.badRequest().body(formErrors);
         }
+        System.out.println("222222222");
 
         //TODO: Porównywanie hashowanego hasła
         if(userRepository.existsByUsername(form.getUsername())==false){
-            return ResponseEntity.status(403).build();
+            return ResponseEntity.status(401).build();
         }
         User user = userRepository.findByUsername(form.getUsername());
 
         if(user.getPassword().equals(form.getPassword())==false){
-            return ResponseEntity.status(403).build();
+            return ResponseEntity.status(401).build();
         }
+        System.out.println("333333333");
 
         JwtPayload jwtPayload = new JwtPayload();
 
@@ -82,8 +85,11 @@ public class PublicController {
             jwtPayload.addRole(role);
             roles.add(role.getName());
         }
+        System.out.println("4444444444444");
 
         String token = jwtUtil.generateToken(jwtPayload.getPayload());
+
+        System.out.println("555555555555");
 
         return ResponseEntity.ok().body(new JwtResponse(token,user.getUsername(),roles));
     }

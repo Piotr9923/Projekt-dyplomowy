@@ -4,8 +4,8 @@ import StaffList from './StaffList';
 import StaffListElement from './StaffListElement';
 
 class AdminHomePage extends Component{
-    
 
+    
     render() {
     
         return(

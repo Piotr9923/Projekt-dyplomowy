@@ -20,9 +20,9 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.*;
 
+@CrossOrigin
 @RequestMapping("/admin")
 @RestController
-@CrossOrigin
 public class AdminController {
 
     private UserRepository userRepository;
@@ -136,7 +136,7 @@ public class AdminController {
     }
 
     @GetMapping("/staff")
-    public ResponseEntity<List<Staff>> getStaff(){
+    public @ResponseBody ResponseEntity getStaff(){
         return ResponseEntity.ok(staffRepository.findAll());
     }
 

@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
+import PublicHeader from './PublicHeader';
 
 class MainPage extends Component{
     constructor(props) {
@@ -10,9 +11,10 @@ class MainPage extends Component{
     render() {
         return(
             <div>
-                Witaj na naszej stronie głównej<br/>
-                <Link to="/admin">Strona administratora</Link><br/>
-                Aders api {process.env.REACT_APP_API_URL}
+                <PublicHeader />
+
+                <h1>Witaj na stronie naszego serwisu komputerowego!</h1>
+                
             </div>
         )
 
