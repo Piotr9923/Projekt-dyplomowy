@@ -10,10 +10,11 @@ import {
 import AdminHomePage from './admin/AdminHomePage';
 import MainPage from './public/MainPage';
 import StaffInfo from './admin/StaffInfo';
-import LoginTypePage from './public/Login';
-import LoginPage from './public/Login';
-import RegistrationTypePage from './public/Registration';
-import ChooseMode from './public/ChooseMode';
+import LoginPage from './public/login/Login';
+import RegistrationTypePage from './public/registration/Registration';
+import ChooseMode from './public/login/ChooseMode';
+import NewUserRegistration from './public/registration/NewUserRegistration';
+import ClientRegistration from './public/registration/ClientRegistration';
 
 function App() {
   return (
@@ -21,10 +22,11 @@ function App() {
       <Route exact path="/" component={MainPage} />
       <Route path="/login" component={LoginPage} />
       <Route path="/dashboard" component={ChooseMode}/>
-      <Route path="/registration" component={RegistrationTypePage} />
-
-
+      <Route exact path="/registration" component={RegistrationTypePage} />
+      <Route path="/registration/new" component={NewUserRegistration} />
+      <Route path="/registration/client" component={ClientRegistration} />
       
+
       <Route exact path="/admin" component={AdminHomePage} />
       <Route exact path="/admin/staff/:id" component={StaffInfo} />
 

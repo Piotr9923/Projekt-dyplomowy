@@ -1,14 +1,14 @@
 import React, {Component} from 'react'
 import {Link, Redirect} from 'react-router-dom'
-import ApiConnect from './ApiConnect';
-import PublicHeader from './PublicHeader';
+import ApiConnect from '../ApiConnect';
+import PublicHeader from '../PublicHeader';
 
 class LoginPage extends Component{
 
     constructor(props) {
         super(props);
 
-        this.changeLogin = this.changeLogin.bind(this);
+        this.changeUsername = this.changeUsername.bind(this);
         this.changePasswrod = this.changePasswrod.bind(this);
         this.login = this.login.bind(this);
 
@@ -16,11 +16,10 @@ class LoginPage extends Component{
             username:"",
             password:"",
             areErrors: false,
-            errors: []
         };
     }
     
-    changeLogin(e){
+    changeUsername(e){
         this.setState({
             username: e.target.value
         })
@@ -95,7 +94,7 @@ class LoginPage extends Component{
 
                     <h2>Zaloguj się</h2>
 
-                    Nazwa użytkownika: <input type="text" onChange={this.changeLogin}/><br/>
+                    Nazwa użytkownika: <input type="text" onChange={this.changeUsername}/><br/>
                     Hasło: <input type="password" onChange={this.changePasswrod}/><br/>
 
                     <button onClick={this.login}>Zaloguj się</button>

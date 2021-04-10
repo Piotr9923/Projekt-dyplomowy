@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
-import PublicHeader from './PublicHeader';
+import PublicHeader from '../PublicHeader';
 
 class RegistrationTypePage extends Component{
 
@@ -13,7 +13,7 @@ class RegistrationTypePage extends Component{
             <div>
                 <PublicHeader />
 
-                <h2>Wybierz sposób logowania:</h2>
+                <h2>Wybierz sposób rejestracji:</h2>
                 <Link to="/registration/new">Nowy użytkownik</Link> - wybierz tą opcję jeśli jesteś naszym nowym klientem!<br/><br/>
                 <Link to="/registration/client">Klient serwisu</Link> - wybierz tą opcję jeśli powierzyłeś nam do naprawy swój sprzęt w serwisie!
 
