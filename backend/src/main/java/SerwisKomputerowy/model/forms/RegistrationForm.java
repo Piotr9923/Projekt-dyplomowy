@@ -10,7 +10,7 @@ public class RegistrationForm {
     private String username;
     @NotBlank(message = "Musisz podać hasło!")
     private String password;
-    @NotBlank(message = "Musisz podać imię!")
+    @NotBlank(message = "Musisz  podać imię!")
     private String firstname;
     @NotBlank(message = "Musisz podać nazwisko!")
     private String lastname;

@@ -11,12 +11,17 @@ class LoginPage extends Component{
         this.changeUsername = this.changeUsername.bind(this);
         this.changePasswrod = this.changePasswrod.bind(this);
         this.login = this.login.bind(this);
+        this.isSubmit = this.isSubmit.bind(this)
 
         this.state = {
             username:"",
             password:"",
             areErrors: false,
         };
+    }
+
+    isSubmit(e){
+        if(e.keyCode===13) this.login()
     }
     
     changeUsername(e){
@@ -74,8 +79,13 @@ class LoginPage extends Component{
 
         })
         .catch(error=>{
-            alert(error.message);
 
+            if(error.message.includes("NetworkError")){
+                alert("Wystąpił błąd! Spróbuj ponownie później!");
+            }
+            else{
+                alert(error.message);
+            }
             this.setState({
                 areErrors: false
             })
@@ -94,8 +104,8 @@ class LoginPage extends Component{
 
                     <h2>Zaloguj się</h2>
 
-                    Nazwa użytkownika: <input type="text" onChange={this.changeUsername}/><br/>
-                    Hasło: <input type="password" onChange={this.changePasswrod}/><br/>
+                    Nazwa użytkownika: <input type="text" onChange={this.changeUsername} onKeyDown={this.isSubmit}/><br/>
+                    Hasło: <input type="password" onChange={this.changePasswrod} onKeyDown={this.isSubmit}/><br/>
 
                     <button onClick={this.login}>Zaloguj się</button>
                 </div>

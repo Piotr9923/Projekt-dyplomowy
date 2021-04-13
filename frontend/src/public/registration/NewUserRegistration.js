@@ -17,6 +17,7 @@ class NewUserRegistration extends Component{
         this.changeFirstname = this.changeFirstname.bind(this);
         this.changeLastname = this.changeLastname.bind(this);
         this.registration = this.registration.bind(this);
+        this.isSubmit = this.isSubmit.bind(this)
 
         this.state = {
             username:"",
@@ -30,6 +31,10 @@ class NewUserRegistration extends Component{
             errors: [],
             redirect: false
         };
+    }
+
+    isSubmit(e){
+        if(e.keyCode===13) this.registration()
     }
 
     changeUsername(e){
@@ -119,8 +124,12 @@ class NewUserRegistration extends Component{
 
             })
             .catch(error=>{
-                alert(error.message);
-
+                if(error.message.includes("NetworkError")){
+                    alert("Wystąpił błąd! Spróbuj ponownie później!");
+                }
+                else{
+                    alert(error.message);
+                }
                 this.setState({
                     areErrors: false
                 })
@@ -137,16 +146,18 @@ class NewUserRegistration extends Component{
 
         return(
             <div>
+                <PublicHeader />
+                
                 <h2>Zarejestruj się:</h2>
 
 
-                Imię: <input type="text" onChange={this.changeFirstname}/><br/>
-                Nazwisko: <input type="text" onChange={this.changeLastname}/><br/>
-                Numer telefonu: <input type="text" onChange={this.changePhoneNumber}/><br/>
-                Email: <input type="text" onChange={this.changeEmail}/><br/>
-                Nazwa użytkownika: <input type="text" onChange={this.changeUsername}/><br/>
-                Hasło: <input type="password" onChange={this.changePassword}/><br/>
-                Podaj ponownie hasło: <input type="password" onChange={this.changePassword2}/><br/>
+                Imię: <input type="text" onChange={this.changeFirstname} onKeyDown={this.isSubmit}/><br/>
+                Nazwisko: <input type="text" onChange={this.changeLastname} onKeyDown={this.isSubmit}/><br/>
+                Numer telefonu: <input type="text" onChange={this.changePhoneNumber} onKeyDown={this.isSubmit}/><br/>
+                Email: <input type="text" onChange={this.changeEmail} onKeyDown={this.isSubmit}/><br/>
+                Nazwa użytkownika: <input type="text" onChange={this.changeUsername} onKeyDown={this.isSubmit}/><br/>
+                Hasło: <input type="password" onChange={this.changePassword} onKeyDown={this.isSubmit}/><br/>
+                Podaj ponownie hasło: <input type="password" onChange={this.changePassword2} onKeyDown={this.isSubmit}/><br/>
 
                 <button onClick={this.registration}>Zarejestruj się</button>
 
