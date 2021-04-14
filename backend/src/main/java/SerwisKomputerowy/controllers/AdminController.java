@@ -137,7 +137,7 @@ public class AdminController {
 
     @GetMapping("/staff")
     public @ResponseBody ResponseEntity getStaff(){
-        return ResponseEntity.ok(staffRepository.findAll());
+        return ResponseEntity.ok(staffRepository.findAllByOrderByLastnameAscFirstnameAsc());
     }
 
     @GetMapping("/staff/{id}")

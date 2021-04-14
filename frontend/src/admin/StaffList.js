@@ -1,6 +1,18 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
+import ApiConnect from '../public/ApiConnect';
+import AdminHeader from './AdminHeader';
 import StaffListElement from './StaffListElement';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    TableSortLabel
+  } from "@material-ui/core";
 
 class StaffList extends Component{
     constructor(props) {
@@ -9,14 +21,25 @@ class StaffList extends Component{
         this.state = {
             isLoading: true,
             staff:[],
-            errors:[]
         };
     }
 
     componentDidMount() {
         this.setState({isLoading: true});
-        var url = ""+process.env.REACT_APP_API_URL + "/admin/staff";
-        console.log("URL = "+url);
+        var url = "/admin/staff";
+        
+        ApiConnect.getMethod(url)
+        .then(response=>response.json())
+        .then(data=>{
+            this.setState({
+                isLoading: false,
+                staff: data
+            })
+        })
+        .catch(error=>{
+            alert("Wystąpił błąd!")
+        })
+
     }
 
     render() {
@@ -25,17 +48,32 @@ class StaffList extends Component{
             return "Trwa ładowanie";
         }
         else{
-            if(this.state.errors){
-                return "POPRAW BŁĘDY";
-            }
             return(
                 <div>
                     
+                    <AdminHeader/>
+
                     <div>
                         Lista pracowników serwisu:
                     </div>
                     <div>
-                        {this.state.staff.map(staff=><StaffListElement info={staff}/>)}
+                    <TableContainer component={Paper}>
+                        <Table aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell align="left">Nazwisko i imię</TableCell>
+                                    <TableCell align="left">Numer telefonu </TableCell>
+                                    <TableCell align="left">Szczegóły </TableCell>
+                                    <TableCell align="left">Edytuj konto </TableCell>
+                                    <TableCell align="left">Usuń konto </TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {this.state.staff.map(staff=><StaffListElement info={staff}/>)}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                        
                     </div>
                 </div>
             )

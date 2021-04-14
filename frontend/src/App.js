@@ -19,21 +19,28 @@ import Logout from './public/Logout';
 import { AdminRoute } from './routes/AdminRoute';
 import { StaffRoute } from './routes/StaffRoute';
 import { LoggedUserRoute } from './routes/LoggedUserRoute';
+import { UnloggedUserRoute } from './routes/UnloggedUserRoute';
+import { ClientRoute } from './routes/ClientRoute';
+import StaffList from './admin/StaffList';
 
 
 function App() {
   return (
     <Router>
       <Route exact path="/" component={MainPage} />
-      <Route path="/login" component={LoginPage} />
+      <UnloggedUserRoute path="/login" component={LoginPage} />
       <LoggedUserRoute path="/dashboard" component={ChooseMode}/>
       <Route exact path="/registration" component={RegistrationTypePage} />
       <Route path="/registration/new" component={NewUserRegistration} />
       <Route path="/registration/client" component={ClientRegistration} />
       <Route path="/logout" component={Logout} />
 
+      
       <AdminRoute exact path="/admin" component={AdminHomePage} />
+      <AdminRoute exact path="/admin/staff-list" component={StaffList} />
       <AdminRoute exact path="/admin/staff/:id" component={StaffInfo} />
+
+      
     </Router>
   )
     

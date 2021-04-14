@@ -15,5 +15,5 @@ public interface StaffRepository extends CrudRepository<Staff,Integer> {
 
     public Staff save(Staff staff);
 
-    public List<Staff> findAll();
+    public List<Staff> findAllByOrderByLastnameAscFirstnameAsc();
 }
