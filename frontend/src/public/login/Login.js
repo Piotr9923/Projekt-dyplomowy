@@ -11,17 +11,12 @@ class LoginPage extends Component{
         this.changeUsername = this.changeUsername.bind(this);
         this.changePasswrod = this.changePasswrod.bind(this);
         this.login = this.login.bind(this);
-        this.isSubmit = this.isSubmit.bind(this)
 
         this.state = {
             username:"",
             password:"",
             areErrors: false,
         };
-    }
-
-    isSubmit(e){
-        if(e.keyCode===13) this.login()
     }
     
     changeUsername(e){
@@ -37,6 +32,7 @@ class LoginPage extends Component{
     }
 
     login(e){
+        e.preventDefault()
         
         var body = JSON.stringify({
             'username':this.state.username,
@@ -103,11 +99,11 @@ class LoginPage extends Component{
                     <PublicHeader />
 
                     <h2>Zaloguj się</h2>
-
-                    Nazwa użytkownika: <input type="text" onChange={this.changeUsername} onKeyDown={this.isSubmit}/><br/>
-                    Hasło: <input type="password" onChange={this.changePasswrod} onKeyDown={this.isSubmit}/><br/>
-
-                    <button onClick={this.login}>Zaloguj się</button>
+                    <form onSubmit={this.login}>
+                        Nazwa użytkownika: <input type="text" onChange={this.changeUsername}/><br/>
+                        Hasło: <input type="password" onChange={this.changePasswrod}/><br/>
+                        <button type="submit">Zaloguj się</button>
+                    </form>
                 </div>
             )
         }

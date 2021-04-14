@@ -14,7 +14,6 @@ class ClientRegistration extends Component{
         this.changePassword2 = this.changePassword2.bind(this);
         this.changeEmail = this.changeEmail.bind(this);
         this.registration = this.registration.bind(this);
-        this.isSubmit = this.isSubmit.bind(this)
 
         this.state = {
             username:"",
@@ -25,10 +24,6 @@ class ClientRegistration extends Component{
             errors: [],
             redirect: false
         };
-    }
-
-    isSubmit(e){
-        if(e.keyCode===13) this.registration()
     }
 
     changeUsername(e){
@@ -56,6 +51,7 @@ class ClientRegistration extends Component{
     }
 
     registration(e){
+        e.preventDefault()
 
         if(this.state.password!=this.state.password2){
             alert("Hasła nie są takie same!");
@@ -125,14 +121,13 @@ class ClientRegistration extends Component{
                 <PublicHeader />
 
                 <h2>Zarejestruj się przy użyciu maila podanego w serwisie</h2>
-
-                Email: <input type="text" onChange={this.changeEmail} onKeyDown={this.isSubmit}/><br/>
-                Nazwa użytkownika: <input type="text" onChange={this.changeUsername} onKeyDown={this.isSubmit}/><br/>
-                Hasło: <input type="password" onChange={this.changePassword} onKeyDown={this.isSubmit}/><br/>
-                Podaj ponownie hasło: <input type="password" onChange={this.changePassword2} onKeyDown={this.isSubmit}/><br/>
-
-                <button onClick={this.registration}>Zarejestruj się</button>
-
+                <form onSubmit={this.registration}>
+                    Email: <input type="text" onChange={this.changeEmail}/><br/>
+                    Nazwa użytkownika: <input type="text" onChange={this.changeUsername}/><br/>
+                    Hasło: <input type="password" onChange={this.changePassword}/><br/>
+                    Podaj ponownie hasło: <input type="password" onChange={this.changePassword2}/><br/>
+                    <button type="submit">Zarejestruj się</button>
+                </form>
             </div>
         )
     }

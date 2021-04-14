@@ -2,12 +2,14 @@ package SerwisKomputerowy.model.forms;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 public class HomeCrashForm {
 
     @NotBlank(message = "Musisz podać miasto!")
     private String city;
 
+    @Pattern(regexp="(^$|[0-9]{2}[\\-][0-9]{3})",message = "Błędny format kodu pocztowego!")
     @NotBlank(message = "Musisz podać kod pocztowy!")
     private String code;
 
