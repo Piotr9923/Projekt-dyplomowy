@@ -32,6 +32,22 @@ class ApiConnect{
 
     }
 
+    putMethod(url, body){
+
+        console.log(ApiUrl+url);
+    
+        return fetch(ApiUrl+url,{
+   
+            method: 'PUT',
+            headers: {
+                'Authorization':'Bearer '+localStorage.getItem("token"),
+                'Content-Type': 'application/json'
+            },
+            body: body
+        })
+
+    }
+
 
 
 }

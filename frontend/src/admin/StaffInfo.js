@@ -53,9 +53,9 @@ class StaffInfo extends Component{
                     Nazwisko: {this.state.info.lastname}<br/>
                     Login: {this.state.info.username}<br/>
                     Telefon: {this.state.info.phoneNumber}<br/>
-                    Mail: {this.state.info.email}<br/>
+                    Adres e-mail: {this.state.info.email}<br/>
                     Wysokość wynagrodzenia: {this.state.info.salary}<br/>
-                    </div>
+                </div>
             )
         }
 

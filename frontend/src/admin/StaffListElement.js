@@ -11,10 +11,10 @@ class StaffListElement extends Component{
     render() {
         return(
                <TableRow>
-                    <TableCell align="left">{this.props.info.firstname+" "+this.props.info.lastname}</TableCell>
+                    <TableCell align="left">{this.props.info.lastname+" "+this.props.info.firstname}</TableCell>
                     <TableCell align="left">{this.props.info.phoneNumber}</TableCell>
                     <TableCell align="left"><Link to={"/admin/staff/"+this.props.info.id}>Wyświetl szczegóły</Link> </TableCell>
-                    <TableCell align="left"><Edit/></TableCell>
+                    <TableCell align="left"><Link to={"/admin/staff/"+this.props.info.id+"/edit"}><Edit/></Link></TableCell>
                     <TableCell align="left"><Delete/></TableCell>
                 </TableRow>
         )

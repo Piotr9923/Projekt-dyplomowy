@@ -5,6 +5,7 @@ import SerwisKomputerowy.entity.Role;
 import SerwisKomputerowy.entity.Staff;
 import SerwisKomputerowy.entity.User;
 import SerwisKomputerowy.model.forms.AnnouncementForm;
+import SerwisKomputerowy.model.forms.StaffEditForm;
 import SerwisKomputerowy.model.forms.StaffForm;
 import SerwisKomputerowy.repository.AnnouncementRepository;
 import SerwisKomputerowy.repository.RoleRepository;
@@ -78,8 +79,8 @@ public class AdminController {
         return ResponseEntity.created(URI.create("/admin/staff/"+createdStaff.getId())).build();
     }
 
-    @PutMapping("/staff")
-    public ResponseEntity<?> updateStaff(@RequestBody @Valid StaffForm form, Errors errors){
+    @PutMapping("/staff/{id}")
+    public ResponseEntity<?> updateStaff(@RequestBody @Valid StaffEditForm form, Errors errors, @PathVariable int id){
 
         if(errors.hasErrors()){
             List<String> errorsList = new ArrayList<>();
@@ -91,17 +92,17 @@ public class AdminController {
             return ResponseEntity.badRequest().body(formErrors);
         }
 
-        if(userRepository.existsByUsername(form.getUsername())){
+        if(userRepository.existsByUsername(form.getUsername()) &&
+                (userRepository.findByUsername(form.getUsername()).getId()!=staffRepository.getStaffById(id).getUserId())){
             List<String> errorsList = new ArrayList<>();
             errorsList.add("Użytkownik o takiej nazwie już istnieje!");
             Map<String,List<String>> userExistsError = new HashMap<String,List<String>>();
             userExistsError.put("errors",errorsList);
             return ResponseEntity.badRequest().body(userExistsError);
-
         }
 
-        Staff updatedStaff = staffRepository.getStaffById(form.getStaffId());
-        User updatedUser = userRepository.getById(form.getUserId());
+        Staff updatedStaff = staffRepository.getStaffById(id);
+        User updatedUser = userRepository.getById(staffRepository.getStaffById(id).getUserId());
 
         if(updatedStaff==null || updatedStaff==null){
             return ResponseEntity.notFound().build();
@@ -143,11 +144,13 @@ public class AdminController {
     @GetMapping("/staff/{id}")
     public ResponseEntity<StaffForm> getStaff(@PathVariable int id){
         StaffForm staffForm = new StaffForm();
-        Staff staff = staffRepository.getStaffByUserId(id);
+        Staff staff = staffRepository.getStaffById(id);
         User user=null;
+
         if(staff!=null) {
             user = userRepository.getById(staff.getUserId());
         }
+
         if(staff!=null && user!=null) {
             staffForm.setDataFromUser(user);
             staffForm.setDataFromStaff(staff);
