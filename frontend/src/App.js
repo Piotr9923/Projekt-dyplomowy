@@ -24,6 +24,9 @@ import { ClientRoute } from './routes/ClientRoute';
 import StaffList from './admin/StaffList';
 import EditStaff from './admin/EditStaff';
 import AddStaff from './admin/AddStaff';
+import AnnouncementList from './admin/AnnouncementList';
+import AnnouncementInfo from './admin/AnnouncementInfo';
+import AddAnnouncement from './admin/AddAnnouncement';
 
 
 function App() {
@@ -44,6 +47,10 @@ function App() {
       <AdminRoute exact path="/admin/staff/:id" component={StaffInfo} />
       <AdminRoute exact path="/admin/staff/:id/edit" component={EditStaff} />
       
+    <AdminRoute exact path="/admin/announcement-list" component={AnnouncementList}/>
+    <AdminRoute exact path="/admin/announcement-list/add" component={AddAnnouncement}/>
+    <AdminRoute exact path="/admin/announcement/:id" component={AnnouncementInfo}/>
+
     </Router>
   )
     

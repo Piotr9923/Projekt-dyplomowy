@@ -17,7 +17,7 @@ class AdminHeader extends Component{
 
                    <li><Link to="/admin">Strona główna</Link></li>
                    <li><Link to="/admin/staff-list">Zarządzaj pracownikami</Link></li>
-                   <li><Link to="/admin/announcement">Zarządzaj ogłoszeniami</Link></li>
+                   <li><Link to="/admin/announcement-list">Zarządzaj ogłoszeniami</Link></li>
                    <li><Link to="/admin/statistics">Statystyki serwisu</Link></li>
                     {chooseMode}
                     <li><Link to="/logout">Wyloguj się</Link></li>

@@ -7,6 +7,7 @@ import SerwisKomputerowy.entity.User;
 import SerwisKomputerowy.model.forms.AnnouncementForm;
 import SerwisKomputerowy.model.forms.StaffEditForm;
 import SerwisKomputerowy.model.forms.StaffForm;
+import SerwisKomputerowy.model.response.AnnouncementResponse;
 import SerwisKomputerowy.repository.AnnouncementRepository;
 import SerwisKomputerowy.repository.RoleRepository;
 import SerwisKomputerowy.repository.StaffRepository;
@@ -193,9 +194,26 @@ public class AdminController {
     }
 
     @GetMapping("/announcement")
-    public ResponseEntity<List<Announcement>> getAllAnnouncements(){
+    public ResponseEntity<List<AnnouncementResponse>> getAllAnnouncements(){
 
-        return ResponseEntity.ok(announcementRepository.findAll());
+        List<Announcement> announcementList = announcementRepository.findAllByOrderByDate();
+
+        List<AnnouncementResponse> responseList = new ArrayList<>();
+
+        for(Announcement announcement: announcementList){
+            AnnouncementResponse response = new AnnouncementResponse();
+
+            response.setText(announcement.getText());
+            response.setTitle(announcement.getTitle());
+            response.setDate(announcement.getDate());
+            response.setRolesNames(announcement.getRoles());
+            response.setId(announcement.getId());
+
+            responseList.add(response);
+        }
+
+
+        return ResponseEntity.ok(responseList);
     }
 
     @PostMapping("/announcement")
@@ -219,7 +237,6 @@ public class AdminController {
         Role role;
 
         for(int i=0;i<form.getRoles().size();i++){
-            System.out.println(form.getRoles().get(i)+"   id " +i);
             if(roleRepository.existsByName(form.getRoles().get(i))) {
                 role = roleRepository.getByName(form.getRoles().get(i));
                 announcementToCreate.addRole(role);
@@ -232,9 +249,17 @@ public class AdminController {
     }
 
     @GetMapping("/announcement/{id}")
-    public ResponseEntity<Announcement> getAnnouncement(@PathVariable int id){
+    public ResponseEntity<AnnouncementResponse> getAnnouncement(@PathVariable int id){
+        Announcement announcement = announcementRepository.getById(id);
 
-        return ResponseEntity.ok(announcementRepository.getById(id));
+        AnnouncementResponse response = new AnnouncementResponse();
+        response.setId(announcement.getId());
+        response.setTitle(announcement.getTitle());
+        response.setText(announcement.getText());
+        response.setRolesNames(announcement.getRoles());
+        response.setDate(announcement.getDate());
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/announcement/{id}")
