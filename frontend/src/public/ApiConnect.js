@@ -33,8 +33,6 @@ class ApiConnect{
     }
 
     putMethod(url, body){
-
-        console.log(ApiUrl+url);
     
         return fetch(ApiUrl+url,{
    
@@ -48,6 +46,18 @@ class ApiConnect{
 
     }
 
+    deleteMethod(url){
+
+        return fetch(ApiUrl+url,{
+   
+            method: 'DELETE',
+            headers: {
+                'Authorization':'Bearer '+localStorage.getItem("token"),
+                'Content-Type': 'application/json'
+            }
+        })
+
+    }
 
 
 }

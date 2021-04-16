@@ -163,6 +163,18 @@ public class AdminController {
     @DeleteMapping("/staff/{id}")
     public ResponseEntity<?> deleteStaff(@PathVariable int id){
 
+        int userId = staffRepository.getStaffById(id).getUserId();
+        User deletedStaffUserAccount = userRepository.getById(userId);
+        if(deletedStaffUserAccount.getRoles().size()>1) {
+            for (Role role : deletedStaffUserAccount.getRoles()) {
+                if (role.getName() == "STAFF") deletedStaffUserAccount.getRoles().remove(role);
+            }
+            userRepository.save(deletedStaffUserAccount);
+        }
+        else{
+            userRepository.deleteById(userId);
+        }
+
         staffRepository.deleteById(id);
 
         return ResponseEntity.noContent().build();

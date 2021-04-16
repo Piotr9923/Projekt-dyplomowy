@@ -23,6 +23,7 @@ import { UnloggedUserRoute } from './routes/UnloggedUserRoute';
 import { ClientRoute } from './routes/ClientRoute';
 import StaffList from './admin/StaffList';
 import EditStaff from './admin/EditStaff';
+import AddStaff from './admin/AddStaff';
 
 
 function App() {
@@ -39,9 +40,9 @@ function App() {
       
       <AdminRoute exact path="/admin" component={AdminHomePage} />
       <AdminRoute exact path="/admin/staff-list" component={StaffList} />
+      <AdminRoute exact path="/admin/staff-list/add" component={AddStaff} />
       <AdminRoute exact path="/admin/staff/:id" component={StaffInfo} />
       <AdminRoute exact path="/admin/staff/:id/edit" component={EditStaff} />
-
       
     </Router>
   )

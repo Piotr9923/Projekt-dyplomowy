@@ -2,6 +2,7 @@ package SerwisKomputerowy.model.forms;
 
 import SerwisKomputerowy.entity.Staff;
 import SerwisKomputerowy.entity.User;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.format.annotation.NumberFormat;
 
@@ -26,6 +27,7 @@ public class StaffForm {
     @NotBlank(message = "Musisz podać adres email!")
     @Email(message = "Błędny format adresu e-mail")
     private String email;
+    @NotNull(message = "Musisz podać wysokość wynagrodzenia!")
     @Min(value = 1,message = "Wysokość wynagrodzenia musi wynosić minimum 1!")
     private int salary;
 

@@ -17,6 +17,8 @@ import {
 class StaffList extends Component{
     constructor(props) {
         super(props);
+
+        this.deleteStaff = this.deleteStaff.bind(this);
         
         this.state = {
             isLoading: true,
@@ -42,6 +44,26 @@ class StaffList extends Component{
 
     }
 
+    deleteStaff(id){
+
+        if(window.confirm("Potwierdzasz usunięcie pracownika?")){
+            ApiConnect.deleteMethod("/admin/staff/"+id)
+            .then(()=>{
+                this.state.staff.forEach((element)=>{
+                    if(element.id==id){
+                        this.state.staff.pop(element);
+                    }
+                })
+                this.forceUpdate();
+            })
+            .catch(error=>{
+                alert("Wystąpił błąd!")
+            })
+        }
+
+
+    }
+
     render() {
 
         if(this.state.isLoading){
@@ -55,6 +77,9 @@ class StaffList extends Component{
 
                     <div>
                         Lista pracowników serwisu:
+                        <div style={{display: 'flex', justifyContent:'flex-end'}}>
+                        <Link to="/admin/staff-list/add">Utwórz pracownika</Link>
+                        </div>
                     </div>
                     <div>
                     <TableContainer component={Paper}>
@@ -69,7 +94,7 @@ class StaffList extends Component{
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {this.state.staff.map(staff=><StaffListElement info={staff}/>)}
+                                {this.state.staff.map(staff=><StaffListElement info={staff} deleteStaff={this.deleteStaff}/>)}
                             </TableBody>
                         </Table>
                     </TableContainer>
