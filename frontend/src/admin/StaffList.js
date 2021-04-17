@@ -11,6 +11,7 @@ import {
     TableHead,
     TableRow,
     Paper,
+    CircularProgress,
     TableSortLabel
   } from "@material-ui/core";
 
@@ -68,46 +69,49 @@ class StaffList extends Component{
 
     }
 
-    render() {
-
-        if(this.state.isLoading){
-            return "Trwa ładowanie";
-        }
-        else{
-            return(
+    StaffTable=()=>{
+        return(
+ 
                 <div>
-                    
-                    <AdminHeader/>
+                <TableContainer component={Paper}>
+                    <Table aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align="left">Nazwisko i imię</TableCell>
+                                <TableCell align="left">Numer telefonu </TableCell>
+                                <TableCell align="left">Szczegóły </TableCell>
+                                <TableCell align="left">Edytuj konto </TableCell>
+                                <TableCell align="left">Usuń konto </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {this.state.staff.map(staff=><StaffListElement info={staff} deleteStaff={this.deleteStaff}/>)}
+                        </TableBody>
+                    </Table>
+                </TableContainer>    
+                </div>
+        )
+    }
 
-                    <div>
-                        Lista pracowników serwisu:
-                        <div style={{display: 'flex', justifyContent:'flex-end'}}>
+    render() {
+        
+        var table = <this.StaffTable/>
+        if(this.state.isLoading){
+            table = <CircularProgress/>
+        }
+        return(
+            <div>
+                
+                <AdminHeader/>
+                <div>
+                    Lista pracowników serwisu:
+                    <div style={{display: 'flex', justifyContent:'flex-end'}}>
                         <Link to="/admin/staff-list/add">Utwórz pracownika</Link>
-                        </div>
                     </div>
-                    <div>
-                    <TableContainer component={Paper}>
-                        <Table aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell align="left">Nazwisko i imię</TableCell>
-                                    <TableCell align="left">Numer telefonu </TableCell>
-                                    <TableCell align="left">Szczegóły </TableCell>
-                                    <TableCell align="left">Edytuj konto </TableCell>
-                                    <TableCell align="left">Usuń konto </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {this.state.staff.map(staff=><StaffListElement info={staff} deleteStaff={this.deleteStaff}/>)}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                        
+                        {table}
                     </div>
                 </div>
-            )
-        }
-
+        )
     }
 
 }

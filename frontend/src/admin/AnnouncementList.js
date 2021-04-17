@@ -10,6 +10,7 @@ import {
     TableHead,
     TableRow,
     Paper,
+    CircularProgress,
     TableSortLabel
   } from "@material-ui/core";
 import AnnouncementListElement from './AnnouncementListElement';
@@ -33,6 +34,7 @@ class AnnouncementList extends Component{
         ApiConnect.getMethod(url)
         .then(response=>response.json())
         .then(data=>{
+            console.log("TEST");
             this.setState({
                 isLoading: false,
                 announcement: data
@@ -41,7 +43,6 @@ class AnnouncementList extends Component{
         .catch(error=>{
             alert("Wystąpił błąd!")
         })
-
     }
 
     deleteAnnouncement(id){
@@ -64,49 +65,59 @@ class AnnouncementList extends Component{
                 alert(error)
             })
         }
-
-
     }
+
+    AnnouncementTable=()=>{
+
+        return(
+            <div>
+            <TableContainer component={Paper}>
+                <Table aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="left">Data</TableCell>
+                            <TableCell align="left">Tytuł ogłoszenia </TableCell>
+                            <TableCell align="left">Odbiorcy </TableCell>
+                            <TableCell align="left">Wyświetl ogłoszenie </TableCell>
+                            <TableCell align="left">Usuń</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {this.state.announcement.map(announcement=><AnnouncementListElement info={announcement} deleteAnnouncement={this.deleteAnnouncement}/>)}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+                
+            </div>
+
+        )
+    }
+
 
     render() {
 
-        if(this.state.isLoading){
-            return "Trwa ładowanie";
-        }
-        else{
-            return(
-                <div>
-                    
-                    <AdminHeader/>
+        var table = <this.AnnouncementTable/>
 
-                    <div>
-                        Lista ogłoszeń:
-                        <div style={{display: 'flex', justifyContent:'flex-end'}}>
-                        <Link to="/admin/announcement-list/add">Utwórz nowe ogłoszenie</Link>
-                        </div>
-                    </div>
-                    <div>
-                    <TableContainer component={Paper}>
-                        <Table aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell align="left">Data</TableCell>
-                                    <TableCell align="left">Tytuł ogłoszenia </TableCell>
-                                    <TableCell align="left">Odbiorcy </TableCell>
-                                    <TableCell align="left">Wyświetl ogłoszenie </TableCell>
-                                    <TableCell align="left">Usuń</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {this.state.announcement.map(announcement=><AnnouncementListElement info={announcement} deleteAnnouncement={this.deleteAnnouncement}/>)}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                        
-                    </div>
-                </div>
-            )
+        if(this.state.isLoading){
+            table = <CircularProgress/>
         }
+     
+        return(
+            <div>
+                
+                <AdminHeader/>
+
+                <div>
+                    Lista ogłoszeń:
+                    <div style={{display: 'flex', justifyContent:'flex-end'}}>
+                    <Link to="/admin/announcement-list/add">Utwórz nowe ogłoszenie</Link>
+                    </div>
+                    {table}
+                </div>
+                
+            </div>
+        )
+        
 
     }
 
