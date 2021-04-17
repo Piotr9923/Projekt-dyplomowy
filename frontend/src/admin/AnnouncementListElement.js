@@ -24,7 +24,7 @@ class AnnouncementListElement extends Component{
                     <TableCell align="left">{this.props.info.title}</TableCell>
                     <TableCell align="left">{this.props.info.rolesNames}</TableCell>
                     <TableCell align="left"><Link to={"/admin/announcement/"+this.props.info.id}>Wyświetl</Link> </TableCell>
-                    <TableCell align="left"><Delete onClick={this.buttonClick}/></TableCell>
+                    <TableCell align="left"><Link style={{color:'red'}}><Delete onClick={this.buttonClick} /></Link></TableCell>
                 </TableRow>
         )
 

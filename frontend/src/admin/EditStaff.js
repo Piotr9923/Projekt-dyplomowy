@@ -3,6 +3,11 @@ import React, {Component} from 'react'
 import {Link, Redirect} from 'react-router-dom'
 import ApiConnect from '../public/ApiConnect';
 import AdminHeader from './AdminHeader';
+import {
+    CircularProgress
+  } from "@material-ui/core";
+import '../App.css';
+import Form from 'react-bootstrap/Form'
 
 class EditStaff extends Component{
     constructor(props) {
@@ -196,13 +201,12 @@ class EditStaff extends Component{
     }
 
     render() {
-        
 
         if(this.state.notFound){
             return(<div><AdminHeader/><br/>Nie znaleziono takiego pracownika</div>)
         }
         else if(this.state.isLoading){
-            return "Trwa ładowanie"
+            return(<div><AdminHeader/><div class="centered"><CircularProgress/></div></div>)
         }else if(this.state.redirect){
             return <Redirect to="/admin/staff-list"/>
         }
@@ -225,8 +229,12 @@ class EditStaff extends Component{
                     Numer telefonu: <input type="text" defaultValue={this.state.phoneNumber} onChange={this.changePhoneNumber}/><br/>
                     Email: <input type="text" defaultValue={this.state.email} onChange={this.changeEmail}/><br/>
                     Wysokość wynagrodzenia: <input type="text" defaultValue={this.state.salary} onChange={this.changeSalary}/><br/>
-                    <input name="editUserData" type="checkbox" onChange={(e)=>{this.setState({editUserData: !this.state.editUserData})}}/>
-                    <label for="editUserData">Edytuj dane użytkownika</label><br/>
+                    <Form.Check 
+                        type="switch"
+                        id="custom-switch"
+                        label="Edycja danych logowania"
+                        onChange={(e)=>{this.setState({editUserData: !this.state.editUserData})}}
+                    />
                     {editUserData}
                     <button onClick={(e)=>{this.setState({redirect:true})}}>Anuluj</button>
                     <button type="submit">Zapisz zmiany</button>

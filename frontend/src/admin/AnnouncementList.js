@@ -14,6 +14,9 @@ import {
     TableSortLabel
   } from "@material-ui/core";
 import AnnouncementListElement from './AnnouncementListElement';
+import '../App.css';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+
 
 class AnnouncementList extends Component{
     constructor(props) {
@@ -99,7 +102,7 @@ class AnnouncementList extends Component{
         var table = <this.AnnouncementTable/>
 
         if(this.state.isLoading){
-            table = <CircularProgress/>
+            table = <div class="centered"><CircularProgress/></div>
         }
      
         return(
@@ -110,7 +113,7 @@ class AnnouncementList extends Component{
                 <div>
                     Lista ogłoszeń:
                     <div style={{display: 'flex', justifyContent:'flex-end'}}>
-                    <Link to="/admin/announcement-list/add">Utwórz nowe ogłoszenie</Link>
+                        <Link style={{color:'green'}} to="/admin/announcement-list/add"><AddCircleOutlineIcon color='black' fontSize='large'/></Link>
                     </div>
                     {table}
                 </div>

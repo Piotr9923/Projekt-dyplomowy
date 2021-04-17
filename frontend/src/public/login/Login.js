@@ -2,6 +2,10 @@ import React, {Component} from 'react'
 import {Link, Redirect} from 'react-router-dom'
 import ApiConnect from '../ApiConnect';
 import PublicHeader from '../PublicHeader';
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 class LoginPage extends Component{
 
@@ -98,12 +102,21 @@ class LoginPage extends Component{
                 <div>
                     <PublicHeader />
 
-                    <h2>Zaloguj się</h2>
-                    <form onSubmit={this.login}>
-                        Nazwa użytkownika: <input type="text" onChange={this.changeUsername}/><br/>
-                        Hasło: <input type="password" onChange={this.changePasswrod}/><br/>
-                        <button type="submit">Zaloguj się</button>
-                    </form>
+                    <Form className='center' style={{width:"20%",margin:"auto"}} onSubmit={this.login}>
+                        <Form.Group controlId="exampleForm.ControlInput1">
+                            <Form.Label>Nazwa użytkownika</Form.Label>
+                            <Form.Control onChange={this.changeUsername}/>
+                        </Form.Group>
+
+                        <Form.Group controlId="exampleForm.ControlTextarea1">
+                            <Form.Label>Hasło</Form.Label>
+                            <Form.Control type="password" onChange={this.changePasswrod}/>
+                        </Form.Group>
+                        
+                        <div style={{width:'40%', margin:'auto'}}>
+                            <Button variant="success" type="submit">Zaloguj się</Button>
+                        </div>
+                    </Form>
                 </div>
             )
         }

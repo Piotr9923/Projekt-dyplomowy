@@ -196,7 +196,7 @@ public class AdminController {
     @GetMapping("/announcement")
     public ResponseEntity<List<AnnouncementResponse>> getAllAnnouncements(){
 
-        List<Announcement> announcementList = announcementRepository.findAllByOrderByDate();
+        List<Announcement> announcementList = announcementRepository.findAllByOrderByDateDesc();
 
         List<AnnouncementResponse> responseList = new ArrayList<>();
 

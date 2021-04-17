@@ -17,6 +17,6 @@ public interface AnnouncementRepository extends CrudRepository<Announcement,Inte
 
     public List<Announcement> findAll();
 
-    public List<Announcement> findAllByOrderByDate();
+    public List<Announcement> findAllByOrderByDateDesc();
 
 }

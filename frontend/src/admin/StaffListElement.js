@@ -24,7 +24,7 @@ class StaffListElement extends Component{
                     <TableCell align="left">{this.props.info.phoneNumber}</TableCell>
                     <TableCell align="left"><Link to={"/admin/staff/"+this.props.info.id}>Wyświetl szczegóły</Link> </TableCell>
                     <TableCell align="left"><Link to={"/admin/staff/"+this.props.info.id+"/edit"}><Edit/></Link></TableCell>
-                    <TableCell align="left"><Delete onClick={this.buttonClick}/></TableCell>
+                    <TableCell align="left"><Link style={{color:'red'}}><Delete onClick={this.buttonClick} /></Link></TableCell>
                 </TableRow>
         )
 

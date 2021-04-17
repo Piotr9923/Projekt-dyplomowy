@@ -1,8 +1,11 @@
-import { Button, Checkbox } from '@material-ui/core';
+import {Checkbox } from '@material-ui/core';
 import React, {Component} from 'react'
 import {Link, Redirect} from 'react-router-dom'
 import ApiConnect from '../public/ApiConnect';
 import AdminHeader from './AdminHeader';
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class AddAnnouncement extends Component{
     constructor(props) {
@@ -156,20 +159,27 @@ class AddAnnouncement extends Component{
             return(
                 <div>
                     <AdminHeader/>
+                
+                    <Form className='center' style={{width:"50%",margin:"auto"}} onSubmit={this.add}>
+                        <Form.Group controlId="exampleForm.ControlInput1">
+                            <Form.Label>Tytuł ogłoszenia</Form.Label>
+                            <Form.Control onChange={this.changeTitle}/>
+                        </Form.Group>
 
-                    <form onSubmit={this.add}>
+                        <Form.Group controlId="exampleForm.ControlTextarea1">
+                            <Form.Label>Treść ogłoszenia</Form.Label>
+                            <Form.Control as="textarea" rows={3} onChange={this.changeText}/>
+                        </Form.Group>
+                        Odbiorcy ogłoszenia:<br/>
+                        <Form.Check inline label="Klienci" type="checkbox" onChange={this.changeClient}/><br/>
+                        <Form.Check inline label="Pracownicy" type="checkbox" onChange={this.changeStaff}/>
+                        <br/>
+                        <div style={{float: 'right'}}>
+                            <Button variant="danger" onClick={(e)=>{this.setState({redirect:true})}} style={{'margin-right':"30px"}}>Anuluj</Button>
+                            <Button variant="success" type="submit">Utwórz</Button>
+                        </div>
+                    </Form>
 
-                    Tytuł: <br/><input type="text"  onChange={this.changeTitle}/><br/>
-                    Tekst: <br/><textarea type="text" onChange={this.changeText}/><br/>
-                    Odbiorcy ogłoszenia:<br/>
-                    <input name="client" type="checkbox" onChange={this.changeClient}/>               
-                    <label for="client">Klienci</label><br/>
-                    <input name="staff" type="checkbox" onChange={this.changeStaff}/>               
-                    <label for="staff">Pracownicy</label><br/>
-                   
-                    <button type="button" onClick={(e)=>{this.setState({redirect:true})}}>Anuluj</button>
-                    <button type="submit">Utwórz</button>
-                </form>
                 </div>
             )
         }

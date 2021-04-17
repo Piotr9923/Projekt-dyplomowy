@@ -2,6 +2,10 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import ApiConnect from '../public/ApiConnect';
 import AdminHeader from './AdminHeader';
+import {
+    CircularProgress
+  } from "@material-ui/core";
+import '../App.css';
 
 class AnnouncementInfo extends Component{
     constructor(props) {
@@ -37,25 +41,39 @@ class AnnouncementInfo extends Component{
         });
     }
 
+    AnnouncementView=()=>{
+
+        return(
+            <div>
+            Data opublikowania: {this.state.info.date}<br/>
+            Tytuł: {this.state.info.title}<br/>
+            Treść:<br/> 
+            <text style={{ whiteSpace: "pre" }}>{this.state.info.text}</text><br/>
+            Odbiorcy: {this.state.info.rolesNames}<br/>
+        </div>
+
+        )
+
+    }
+
     render() {
 
+        var info = <this.AnnouncementView/>
+
         if(this.state.notFound){
-            return(<div><AdminHeader/><br/>Nie znaleziono takiego ogłoszenia!</div>)
+            info = <div>Nie znaleziono takiego ogłoszenia!</div>
         }
         else if(this.state.isLoading){
-            return "Trwa ładowanie"
+            info = <div class="centered"><CircularProgress/></div>
         }
-        else{
-            return(
-                <div>
-                    <AdminHeader/>
-                    Data opublikowania: {this.state.info.date}<br/>
-                    Tytuł: {this.state.info.title}<br/>
-                    Treść: {this.state.info.text}<br/>
-                    Odbiorcy: {this.state.info.rolesNames}<br/>
-                </div>
-            )
-        }
+
+        return(
+            <div>
+                <AdminHeader/>
+                {info}
+            </div>
+        )
+        
 
     }
 

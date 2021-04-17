@@ -14,6 +14,9 @@ import {
     CircularProgress,
     TableSortLabel
   } from "@material-ui/core";
+  import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+  import '../App.css';
+
 
 class StaffList extends Component{
     constructor(props) {
@@ -79,7 +82,7 @@ class StaffList extends Component{
                             <TableRow>
                                 <TableCell align="left">Nazwisko i imię</TableCell>
                                 <TableCell align="left">Numer telefonu </TableCell>
-                                <TableCell align="left">Szczegóły </TableCell>
+                                <TableCell align="left"> </TableCell>
                                 <TableCell align="left">Edytuj konto </TableCell>
                                 <TableCell align="left">Usuń konto </TableCell>
                             </TableRow>
@@ -97,16 +100,17 @@ class StaffList extends Component{
         
         var table = <this.StaffTable/>
         if(this.state.isLoading){
-            table = <CircularProgress/>
+            table = <div class="centered"><CircularProgress/></div>
         }
         return(
             <div>
+                
                 
                 <AdminHeader/>
                 <div>
                     Lista pracowników serwisu:
                     <div style={{display: 'flex', justifyContent:'flex-end'}}>
-                        <Link to="/admin/staff-list/add">Utwórz pracownika</Link>
+                        <Link style={{color:'green'}} to="/admin/staff-list/add"><AddCircleOutlineIcon color='black' fontSize='large'/></Link>
                     </div>
                         {table}
                     </div>
