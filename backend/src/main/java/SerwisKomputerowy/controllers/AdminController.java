@@ -251,7 +251,9 @@ public class AdminController {
     @GetMapping("/announcement/{id}")
     public ResponseEntity<AnnouncementResponse> getAnnouncement(@PathVariable int id){
         Announcement announcement = announcementRepository.getById(id);
-
+        if(announcement==null){
+            return ResponseEntity.notFound().build();
+        }
         AnnouncementResponse response = new AnnouncementResponse();
         response.setId(announcement.getId());
         response.setTitle(announcement.getTitle());

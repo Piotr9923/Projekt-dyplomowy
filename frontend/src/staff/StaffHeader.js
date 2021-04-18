@@ -3,7 +3,7 @@ import {Link, Redirect} from 'react-router-dom'
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-class AdminHeader extends Component{
+class StaffHeader extends Component{
     
     render(){
 
@@ -21,9 +21,9 @@ class AdminHeader extends Component{
                     <Navbar.Toggle aria-controls='responsive-navbar-nav'/>
                     <Navbar.Collapse id='responsive-navbar-nav'>
                         <Nav>
-                            <Nav.Link href="/admin" style={{color:"white","margin-right":"50px"}}>Strona główna</Nav.Link>
-                            <Nav.Link href="/admin/staff-list" style={{color:"white","margin-right":"50px"}}>Zarządzaj pracownikami</Nav.Link>
-                            <Nav.Link href="/admin/announcement-list" style={{color:"white","margin-right":"50px"}}>Zarządzaj ogłoszeniami</Nav.Link>
+                            <Nav.Link href="/staff" style={{color:"white","margin-right":"50px"}}>Strona główna</Nav.Link>
+                            <Nav.Link href="/staff/crash-list" style={{color:"white","margin-right":"50px"}}>Lista awarii</Nav.Link>
+                            <Nav.Link href="/staff/crash-list/add" style={{color:"white","margin-right":"50px"}}>Dodaj nową awarię</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                     <Navbar.Collapse className="justify-content-end">
@@ -42,4 +42,4 @@ class AdminHeader extends Component{
 
 }
 
-export default AdminHeader;
+export default StaffHeader;

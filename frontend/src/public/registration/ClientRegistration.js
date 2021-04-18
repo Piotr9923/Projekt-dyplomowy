@@ -2,6 +2,9 @@ import React, {Component} from 'react'
 import {Link, Redirect} from 'react-router-dom'
 import ApiConnect from '../ApiConnect';
 import PublicHeader from '../PublicHeader';
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class ClientRegistration extends Component{
 
@@ -120,14 +123,31 @@ class ClientRegistration extends Component{
                 
                 <PublicHeader />
 
-                <h2>Zarejestruj się przy użyciu maila podanego w serwisie</h2>
-                <form onSubmit={this.registration}>
-                    Email: <input type="text" onChange={this.changeEmail}/><br/>
-                    Nazwa użytkownika: <input type="text" onChange={this.changeUsername}/><br/>
-                    Hasło: <input type="password" onChange={this.changePassword}/><br/>
-                    Podaj ponownie hasło: <input type="password" onChange={this.changePassword2}/><br/>
-                    <button type="submit">Zarejestruj się</button>
-                </form>
+                <Form className='center' style={{width:"20%",margin:"auto"}} onSubmit={this.registration}>
+                        <Form.Group controlId="registration.mail">
+                            <Form.Label>Adres e-mail podany w serwisie</Form.Label>
+                            <Form.Control onChange={this.changeEmail}/>
+                        </Form.Group>
+
+                        <Form.Group controlId="registration.username">
+                            <Form.Label>Nazwa użytkownika</Form.Label>
+                            <Form.Control onChange={this.changeUsername}/>
+                        </Form.Group>
+
+                        <Form.Group controlId="registration.password">
+                            <Form.Label>Hasło</Form.Label>
+                            <Form.Control type="password" onChange={this.changePassword}/>
+                        </Form.Group>
+
+                        <Form.Group controlId="registration.password2">
+                            <Form.Label>Podaj ponownie hasło</Form.Label>
+                            <Form.Control type="password" onChange={this.changePassword2}/>
+                        </Form.Group>
+                        
+                        <div style={{width:'50%', margin:'auto'}}>
+                            <Button variant="success" type="submit">Zarejestruj się</Button>
+                        </div>
+                    </Form>
             </div>
         )
     }

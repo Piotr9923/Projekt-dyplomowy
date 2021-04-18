@@ -2,6 +2,9 @@ import React, {Component} from 'react'
 import {Link, Redirect} from 'react-router-dom'
 import ApiConnect from '../ApiConnect';
 import PublicHeader from '../PublicHeader';
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class NewUserRegistration extends Component{
 
@@ -143,21 +146,49 @@ class NewUserRegistration extends Component{
         return(
             <div>
                 <PublicHeader />
-                
-                <h2>Zarejestruj się:</h2>
 
-                <form onSubmit={this.registration}>
+                <Form className='center' style={{width:"20%",margin:"auto"}} onSubmit={this.registration}>
+                        
+                        <Form.Group controlId="registration1.firstname">
+                            <Form.Label>Imię</Form.Label>
+                            <Form.Control onChange={this.changeFirstname}/>
+                        </Form.Group>
 
-                    Imię: <input type="text" onChange={this.changeFirstname}/><br/>
-                    Nazwisko: <input type="text" onChange={this.changeLastname}/><br/>
-                    Numer telefonu: <input type="text" onChange={this.changePhoneNumber}/><br/>
-                    Email: <input type="text" onChange={this.changeEmail}/><br/>
-                    Nazwa użytkownika: <input type="text" onChange={this.changeUsername}/><br/>
-                    Hasło: <input type="password" onChange={this.changePassword}/><br/>
-                    Podaj ponownie hasło: <input type="password" onChange={this.changePassword2}/><br/>
+                        <Form.Group controlId="registration1.lastname">
+                            <Form.Label>Nazwisko</Form.Label>
+                            <Form.Control onChange={this.changeLastname}/>
+                        </Form.Group>
 
-                    <button type="submit">Zarejestruj się</button>
-                </form>
+                        <Form.Group controlId="registration1.phoneNumber">
+                            <Form.Label>Numer telefonu</Form.Label>
+                            <Form.Control onChange={this.changePhoneNumber}/>
+                        </Form.Group>
+                        
+                        <Form.Group controlId="registration1.mail">
+                            <Form.Label>Adres e-mail</Form.Label>
+                            <Form.Control onChange={this.changeEmail}/>
+                        </Form.Group>
+
+                        <Form.Group controlId="registration1.username">
+                            <Form.Label>Nazwa użytkownika</Form.Label>
+                            <Form.Control onChange={this.changeUsername}/>
+                        </Form.Group>
+
+                        <Form.Group controlId="registration1.password">
+                            <Form.Label>Hasło</Form.Label>
+                            <Form.Control type="password" onChange={this.changePassword}/>
+                        </Form.Group>
+
+                        <Form.Group controlId="registration1.password2">
+                            <Form.Label>Podaj ponownie hasło</Form.Label>
+                            <Form.Control type="password" onChange={this.changePassword2}/>
+                        </Form.Group>
+                        
+                        <div style={{width:'50%', margin:'auto'}}>
+                            <Button variant="success" type="submit">Zarejestruj się</Button>
+                        </div>
+                    </Form>
+                    <br/><br/>
 
             </div>
         )

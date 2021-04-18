@@ -170,5 +170,10 @@ public class StaffController {
         return ResponseEntity.ok(homeCrashRepository.getById(id));
     }
 
+    @GetMapping("/client")
+    public ResponseEntity<List<Client>> getClientList(){
+        return ResponseEntity.ok(clientRepository.findAllByOrderByLastnameAscFirstnameAsc());
+    }
+
 
 }

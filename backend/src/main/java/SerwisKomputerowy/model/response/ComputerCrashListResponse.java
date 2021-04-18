@@ -1,5 +1,7 @@
 package SerwisKomputerowy.model.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class ComputerCrashListResponse {
@@ -9,6 +11,7 @@ public class ComputerCrashListResponse {
     private String client;
     private String status;
     private String type;
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date date;
 
     public ComputerCrashListResponse() {

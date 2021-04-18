@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import {
   BrowserRouter as Router,
@@ -27,6 +26,9 @@ import AddStaff from './admin/AddStaff';
 import AnnouncementList from './admin/AnnouncementList';
 import AnnouncementInfo from './admin/AnnouncementInfo';
 import AddAnnouncement from './admin/AddAnnouncement';
+import StaffHomePage from './staff/StaffHomePage';
+import ComputerCrashList from './staff/ComputerCrashList';
+import AddComputerCrash from './staff/AddComputerCrash';
 
 
 function App() {
@@ -46,10 +48,15 @@ function App() {
       <AdminRoute exact path="/admin/staff-list/add" component={AddStaff} />
       <AdminRoute exact path="/admin/staff/:id" component={StaffInfo} />
       <AdminRoute exact path="/admin/staff/:id/edit" component={EditStaff} />
+
+      <AdminRoute exact path="/admin/announcement-list" component={AnnouncementList}/>
+      <AdminRoute exact path="/admin/announcement-list/add" component={AddAnnouncement}/>
+      <AdminRoute exact path="/admin/announcement/:id" component={AnnouncementInfo}/>
       
-    <AdminRoute exact path="/admin/announcement-list" component={AnnouncementList}/>
-    <AdminRoute exact path="/admin/announcement-list/add" component={AddAnnouncement}/>
-    <AdminRoute exact path="/admin/announcement/:id" component={AnnouncementInfo}/>
+      <StaffRoute exact path="/staff" component={StaffHomePage}/>
+      <StaffRoute exact path="/staff/crash-list" component={ComputerCrashList}/>
+      <StaffRoute exact path="/staff/crash-list/add" component={AddComputerCrash}/>
+
 
     </Router>
   )

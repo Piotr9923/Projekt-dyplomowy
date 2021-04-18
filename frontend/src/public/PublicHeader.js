@@ -15,9 +15,9 @@ class PublicHeader extends Component{
                     <Navbar.Toggle aria-controls='responsive-navbar-nav'/>
                     <Navbar.Collapse id='responsive-navbar-nav'>
                         <Nav>
-                            <Nav.Link href="/">Strona główna</Nav.Link>
-                            <Nav.Link href="/login">Zaloguj się</Nav.Link>
-                            <Nav.Link href="/registration">Zarejestruj się</Nav.Link>
+                            <Nav.Link href="/" style={{color:"white","margin-right":"50px"}}>Strona główna</Nav.Link>
+                            <Nav.Link href="/login" style={{color:"white","margin-right":"50px"}}>Zaloguj się</Nav.Link>
+                            <Nav.Link href="/registration" style={{color:"white","margin-right":"50px"}}>Zarejestruj się</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
