@@ -31,6 +31,7 @@ class ComputerCrashList extends Component{
             crash:[],
             filteredData:[],
             filterClient:"",
+            filterType:"",
             filterActive: true
         };
     }
@@ -55,22 +56,25 @@ class ComputerCrashList extends Component{
     }
 
     filter=()=>{
+        
         var filtered = [];
     
-        console.log(this.state.filterActive)
-
         this.state.crash.map((crash)=>{
 
             if(this.state.filterActive){
                 if(crash.status!="Zakończona"){
                     if(crash.client.toUpperCase().includes(this.state.filterClient.toUpperCase())){
-                        filtered.push(crash);
+                        if(crash.type.includes(this.state.filterType)){
+                            filtered.push(crash);
+                        }
                     }
                 }
             }
             else{
                 if(crash.client.toUpperCase().includes(this.state.filterClient.toUpperCase())){
-                    filtered.push(crash);
+                    if(crash.type.includes(this.state.filterType)){
+                        filtered.push(crash);
+                    }
                 }
             }
 
@@ -80,12 +84,29 @@ class ComputerCrashList extends Component{
         })
     }
 
+    changeFilterType=(e)=>{
+        if(e.target.value.includes("Wszystkie")){
+            this.setState({filterType:""})
+        }
+        else if(e.target.value.includes("Serwis")){
+            this.setState({filterType:"SERVICE"})
+        }
+        else{
+            this.setState({filterType:"HOME"})
+        }
+    }
+
     FilterPanel=()=>{
 
         return (
             <div className="centered" style={{backgroundColor:"#D3D3D3"}}>
                 <input placeholder="Dane klienta" style={{'margin-right':"30px"}} onChange={(e)=>{this.setState({filterClient:e.target.value})}}></input>
-                <Form.Check inline label="Aktywne awarie" defaultChecked="true" type="checkbox" style={{'margin-right':"30px"}} onClick={()=>{this.setState({filterActive:!this.state.filterActive})}}/>
+                <Form.Control as="select" style={{width:"13%",'margin-right':"30px"}} onChange={this.changeFilterType}>
+                    <option>Wszystkie</option>
+                    <option>Serwis</option>
+                    <option>Awaria domowa</option>
+                </Form.Control>
+                <Form.Check inline label="W trakcie naprawy" defaultChecked="true" type="checkbox" style={{'margin-right':"30px"}} onClick={()=>{this.setState({filterActive:!this.state.filterActive})}}/>
                 <Button variant="dark" onClick={this.filter} style={{'margin-right':"30px"}}>Filtruj</Button>
             </div>
 
@@ -127,7 +148,6 @@ class ComputerCrashList extends Component{
         return(
             <div>
                 
-                
                 <StaffHeader/>
                 <div>
                     <this.FilterPanel/><br/>
@@ -135,9 +155,10 @@ class ComputerCrashList extends Component{
                     <div style={{display: 'flex', justifyContent:'flex-end'}}>
                         <Link style={{color:'green'}} to="/staff/crash-list/add"><AddCircleOutlineIcon color='black' fontSize='large'/></Link>
                     </div>
-                        {table}
-                    </div>
+                    {table}
                 </div>
+                
+             </div>
         )
     }
 
