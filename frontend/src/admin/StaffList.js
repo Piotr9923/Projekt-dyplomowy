@@ -108,9 +108,9 @@ class StaffList extends Component{
                 
                 <AdminHeader/>
                 <div>
-                    Lista pracowników serwisu:
-                    <div style={{display: 'flex', justifyContent:'flex-end'}}>
-                        <Link style={{color:'green'}} to="/admin/staff-list/add"><AddCircleOutlineIcon color='black' fontSize='large'/></Link>
+                    <div style={{display:"flex","justify-content":"center","position":"relative"}}>
+                        <h2 style={{"text-align":"center"}}>Lista pracowników serwisu:</h2>
+                        <Link style={{position:"absolute", "right":"0",color:'green'}} to="/admin/staff-list/add"><AddCircleOutlineIcon color='black' fontSize='large'/></Link>
                     </div>
                         {table}
                     </div>

@@ -111,10 +111,12 @@ class AnnouncementList extends Component{
                 <AdminHeader/>
 
                 <div>
-                    Lista ogłoszeń:
-                    <div style={{display: 'flex', justifyContent:'flex-end'}}>
-                        <Link style={{color:'green'}} to="/admin/announcement-list/add"><AddCircleOutlineIcon color='black' fontSize='large'/></Link>
+
+                    <div style={{display:"flex","justify-content":"center","position":"relative"}}>
+                        <h2 style={{"text-align":"center"}}>Lista ogłoszeń:</h2>
+                        <Link style={{position:"absolute", "right":"0",color:'green'}} to="/admin/announcement-list/add"><AddCircleOutlineIcon color='black' fontSize='large'/></Link>
                     </div>
+
                     {table}
                 </div>
                 

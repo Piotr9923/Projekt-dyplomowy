@@ -240,7 +240,7 @@ class AddComputerCrash extends Component{
                                         <option>Naprawa gwarancyjna</option>
                                         <option>Naprawa pogwarancyjna</option>
                                         <option>Wymiana podzespołów</option>
-                                        <option>Instalowanie oprogramowania</option>
+                                        <option>Instalacja oprogramowania</option>
                                         <option>Inne</option>
                                     </Form.Control>
                                     {crashTypeInputField}

@@ -29,6 +29,8 @@ import AddAnnouncement from './admin/AddAnnouncement';
 import StaffHomePage from './staff/StaffHomePage';
 import ComputerCrashList from './staff/ComputerCrashList';
 import AddComputerCrash from './staff/AddComputerCrash';
+import EditComputerCrash from './staff/EditComputerCrash';
+import EditHomeCrash from './staff/EditHomeCrash';
 
 
 function App() {
@@ -56,6 +58,8 @@ function App() {
       <StaffRoute exact path="/staff" component={StaffHomePage}/>
       <StaffRoute exact path="/staff/crash-list" component={ComputerCrashList}/>
       <StaffRoute exact path="/staff/crash-list/add" component={AddComputerCrash}/>
+      <StaffRoute exact path="/staff/crash/:id/edit" component={EditComputerCrash}/>
+      <StaffRoute exact path="/staff/home-crash/:id/edit" component={EditHomeCrash}/>
 
 
     </Router>

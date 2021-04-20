@@ -151,9 +151,10 @@ class ComputerCrashList extends Component{
                 <StaffHeader/>
                 <div>
                     <this.FilterPanel/><br/>
-                    <h2 classname="centered">Lista awarii:</h2>
-                    <div style={{display: 'flex', justifyContent:'flex-end'}}>
-                        <Link style={{color:'green'}} to="/staff/crash-list/add"><AddCircleOutlineIcon color='black' fontSize='large'/></Link>
+
+                    <div style={{display:"flex","justify-content":"center","position":"relative"}}>
+                        <h2 style={{"text-align":"center"}}>Lista awarii:</h2>
+                        <Link style={{position:"absolute", "right":"0",color:'green'}} to="/staff/crash-list/add"><AddCircleOutlineIcon color='black' fontSize='large'/></Link>
                     </div>
                     {table}
                 </div>
