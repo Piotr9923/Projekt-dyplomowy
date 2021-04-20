@@ -207,6 +207,56 @@ public class StaffController {
         return ResponseEntity.ok(computerCrashRepository.getById(id));
     }
 
+    @PutMapping("/home_crash/{id}")
+    public ResponseEntity updateHomeCrash(@PathVariable int id, @RequestBody @Valid UpdateComputerCrashForm form, Errors errors){
+
+        if(errors.hasErrors()){
+            List<String> errorsList = new ArrayList<>();
+            for(int i=0;i<errors.getErrorCount();i++){
+                errorsList.add(errors.getAllErrors().get(i).getDefaultMessage());
+            }
+            Map<String,List<String>> formErrors = new HashMap<String,List<String>>();
+            formErrors.put("errors",errorsList);
+            return ResponseEntity.badRequest().body(formErrors);
+        }
+
+        if(computerCrashRepository.existsById(id)==false){
+            List<String> errorsList = new ArrayList<>();
+            errorsList.add("Wystąpił błąd!");
+            Map<String,List<String>> errorsMessage = new HashMap<String,List<String>>();
+            errorsMessage.put("errors",errorsList);
+            return ResponseEntity.badRequest().body(errorsMessage);
+        }
+
+        if(form.getDescription()!=null && form.getDescription().isBlank()){
+            List<String> errorsList = new ArrayList<>();
+            errorsList.add("Musisz podać opis awarii!");
+            Map<String,List<String>> errorsMessage = new HashMap<String,List<String>>();
+            errorsMessage.put("errors",errorsList);
+            return ResponseEntity.badRequest().body(errorsMessage);
+        }
+
+        HomeComputerCrash crashToUpdate = homeCrashRepository.getById(id);
+
+        if(form.getDescription()!=null){
+            crashToUpdate.setDescription(form.getDescription());
+        }
+        if(form.getCrashMessage()!=null){
+            crashToUpdate.setCrashMessage(form.getCrashMessage());
+        }
+        if(form.getStatus()!=null){
+            crashToUpdate.setStatus(form.getStatus());
+        }
+
+        if(form.getCost()>=0){
+            crashToUpdate.setCost(form.getCost());
+        }
+
+        homeCrashRepository.save(crashToUpdate);
+
+        return ResponseEntity.ok(computerCrashRepository.getById(id));
+    }
+
     @GetMapping("/home_crash/{id}")
     public ResponseEntity getHomeCrash(@PathVariable int id){
 

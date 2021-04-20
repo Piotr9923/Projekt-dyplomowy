@@ -107,7 +107,7 @@ class EditHomeCrash extends Component{
 
         var body = this.createData();
         
-        ApiConnect.putMethod("/staff/crash/"+this.props.match.params.id,body)
+        ApiConnect.putMethod("/staff/home_crash/"+this.props.match.params.id,body)
         .then(response=>{
             
             if(response.status==400){
@@ -166,7 +166,7 @@ class EditHomeCrash extends Component{
 
     componentDidMount() {
         this.setState({isLoading: true});
-        var url = "/staff/crash/"+this.props.match.params.id;
+        var url = "/staff/home_crash/"+this.props.match.params.id;
 
         ApiConnect.getMethod(url).
         then(response => {
