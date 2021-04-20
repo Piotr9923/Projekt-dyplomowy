@@ -64,7 +64,7 @@ public class ClientController {
         newCrash.setTitle(form.getTitle());
         newCrash.setDescription(form.getDescription());
         newCrash.setDate(new Date());
-        newCrash.setStatus("ZGŁOSZONA");
+        newCrash.setStatus("Zgłoszona");
         String loggedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 
         int userId = userRepository.findByUsername(loggedUser).getId();

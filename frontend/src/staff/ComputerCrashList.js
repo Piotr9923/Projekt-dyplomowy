@@ -2,6 +2,9 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import ApiConnect from '../public/ApiConnect';
 import ComputerCrashListElement from './ComputerCrashListElement'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import {
     Table,
@@ -22,12 +25,13 @@ import StaffHeader from './StaffHeader';
 class ComputerCrashList extends Component{
     constructor(props) {
         super(props);
-
-        this.deleteStaff = this.deleteStaff.bind(this);
         
         this.state = {
             isLoading: true,
-            staff:[],
+            crash:[],
+            filteredData:[],
+            filterClient:"",
+            filterActive: true
         };
     }
 
@@ -40,37 +44,52 @@ class ComputerCrashList extends Component{
         .then(data=>{
             this.setState({
                 isLoading: false,
-                staff: data
+                crash: data,
+                filteredData: data
             })
-        })
+        }).then(this.filter)
         .catch(error=>{
             alert("Wystąpił błąd!")
         })
 
     }
 
-    deleteStaff(id){
+    filter=()=>{
+        var filtered = [];
+    
+        console.log(this.state.filterActive)
 
-        if(window.confirm("Potwierdzasz usunięcie pracownika?")){
-            ApiConnect.deleteMethod("/admin/staff/"+id)
-            .then(()=>{
-                var index=-1;
-                this.state.staff.forEach((element)=>{
-                    if(element.id==id){
-                        index = this.state.staff.indexOf(element);
+        this.state.crash.map((crash)=>{
+
+            if(this.state.filterActive){
+                if(crash.status!="Zakończona"){
+                    if(crash.client.toUpperCase().includes(this.state.filterClient.toUpperCase())){
+                        filtered.push(crash);
                     }
-                })
-                if(index>=0){
-                    this.state.staff.splice(index,1)
                 }
-                this.forceUpdate();
-            })
-            .catch(error=>{
-                alert("Wystąpił błąd!")
-            })
-        }
+            }
+            else{
+                if(crash.client.toUpperCase().includes(this.state.filterClient.toUpperCase())){
+                    filtered.push(crash);
+                }
+            }
 
+        })
+        this.setState({
+            filteredData:filtered
+        })
+    }
 
+    FilterPanel=()=>{
+
+        return (
+            <div className="centered" style={{backgroundColor:"#D3D3D3"}}>
+                <input placeholder="Dane klienta" style={{'margin-right':"30px"}} onChange={(e)=>{this.setState({filterClient:e.target.value})}}></input>
+                <Form.Check inline label="Aktywne awarie" defaultChecked="true" type="checkbox" style={{'margin-right':"30px"}} onClick={()=>{this.setState({filterActive:!this.state.filterActive})}}/>
+                <Button variant="dark" onClick={this.filter} style={{'margin-right':"30px"}}>Filtruj</Button>
+            </div>
+
+        )
     }
 
     ComputerCrashTable=()=>{
@@ -91,7 +110,7 @@ class ComputerCrashList extends Component{
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.state.staff.map(staff=><ComputerCrashListElement info={staff} deleteStaff={this.deleteStaff}/>)}
+                            {this.state.filteredData.map(staff=><ComputerCrashListElement info={staff} deleteStaff={this.deleteStaff}/>)}
                         </TableBody>
                     </Table>
                 </TableContainer>    
@@ -111,7 +130,8 @@ class ComputerCrashList extends Component{
                 
                 <StaffHeader/>
                 <div>
-                    Lista awarii:
+                    <this.FilterPanel/><br/>
+                    <h2 classname="centered">Lista awarii:</h2>
                     <div style={{display: 'flex', justifyContent:'flex-end'}}>
                         <Link style={{color:'green'}} to="/staff/crash-list/add"><AddCircleOutlineIcon color='black' fontSize='large'/></Link>
                     </div>

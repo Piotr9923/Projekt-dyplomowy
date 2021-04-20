@@ -53,7 +53,7 @@ class ClientList extends Component{
 
         return(
             <div>
-            <Paper style={{height:"300px", width:"550px", overflow: 'auto'}}>
+            <Paper style={{height:"350px", width:"550px", overflow: 'auto'}}>
                 <TableContainer>
                     <Table aria-label="simple table">
                         <TableHead>

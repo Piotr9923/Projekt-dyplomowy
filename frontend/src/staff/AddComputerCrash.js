@@ -25,26 +25,39 @@ class AddComputerCrash extends Component{
         this.add = this.add.bind(this);
 
         this.state = {
-            title:"",
+            title:"Naprawa gwarancyjna",
             description: "",
             isNewClient: true,
             firstname:"",
             lastname:"",
             phoneNumber:"",
             email:"",
-            clientId:"",
+            clientId: -1,
             selectedClient:[],
             areErrors: false,
             errors: [],
             redirect: false,
+            anotherType: false
         };
     }
 
     changeTitle(e){
-        console.log(this.state.roles)
+        if(e.target.type=="select-one"){
+            this.setState({
+                anotherType: false
+            })
+        }
+        
         this.setState({
-            title: e.target.value
+            title: e.target.value,
         })
+
+        if(e.target.value=="Inne"){
+            this.setState({
+                title: "",
+                anotherType: true
+            })
+        }
     }
 
     changeDescription(e){
@@ -77,7 +90,8 @@ class AddComputerCrash extends Component{
     
     chooseClient(client){
         this.setState({
-            selectedClient: client
+            selectedClient: client,
+            clientId: client.id
         })
     }
     
@@ -108,51 +122,54 @@ class AddComputerCrash extends Component{
 
     add(e){
         e.preventDefault()
+        if(this.state.isNewClient==false && this.state.clientId<0){
+            alert("Musisz wybrać klienta z listy!");
+        }
+        else{
+            var body = this.createData();
 
-        var body = this.createData();
+            ApiConnect.postMethod("/staff/crash",body)
+            .then(response=>{
+                
+                if(response.status==400){
+                    this.setState({
+                        areErrors: true
+                    })
+                }
+                else{
+                    this.setState({
+                        areErrors: false
+                    })
+                    this.setState({
+                        redirect: true
+                    })
+                    this.forceUpdate()
 
-        ApiConnect.postMethod("/staff/crash",body)
-        .then(response=>{
-            
-            if(response.status==400){
-                this.setState({
-                    areErrors: true
+                    throw new Error("Pomyślnie zarejestrowano awarię!")
+                }
+                return response.json();
+            })
+            .then(data=>{
+                
+                var errorsMessage = "";
+                data.errors.map(error=>{
+                    errorsMessage = errorsMessage + error +"\n";
                 })
-            }
-            else{
+                throw Error(errorsMessage);
+            
+            })
+            .catch(error=>{
+                if(error.message.includes("NetworkError")){
+                    alert("Wystąpił błąd! Spróbuj ponownie później!");
+                }
+                else{
+                    alert(error.message);
+                }
                 this.setState({
                     areErrors: false
                 })
-                this.setState({
-                    redirect: true
-                })
-                this.forceUpdate()
-
-                throw new Error("Pomyślnie utworzono ogłoszenie!")
-            }
-            return response.json();
-        })
-        .then(data=>{
-            
-            var errorsMessage = "";
-            data.errors.map(error=>{
-                errorsMessage = errorsMessage + error +"\n";
             })
-            throw Error(errorsMessage);
-        
-        })
-        .catch(error=>{
-            if(error.message.includes("NetworkError")){
-                alert("Wystąpił błąd! Spróbuj ponownie później!");
-            }
-            else{
-                alert(error.message);
-            }
-            this.setState({
-                areErrors: false
-            })
-        })
-
+        }
     }
 
     NewClientForm=()=>{
@@ -184,6 +201,14 @@ class AddComputerCrash extends Component{
 
 
     render() {
+
+        var crashTypeInputField = "";
+
+        if(this.state.anotherType){
+            crashTypeInputField =  <Form.Group>
+            <Form.Label>Wpisz nazwę awarii</Form.Label><Form.Control onChange={this.changeTitle}/></Form.Group>
+        }
+
         var selectedClient = ""
         if(this.state.selectedClient.id){
             selectedClient = <div>Wybrano klienta: {this.state.selectedClient.lastname}  {this.state.selectedClient.firstname}</div>
@@ -211,7 +236,14 @@ class AddComputerCrash extends Component{
                             <Form  onSubmit={this.add}>
                                 <Form.Group controlId="exampleForm.ControlInput2">
                                     <Form.Label>Nazwa awarii</Form.Label>
-                                    <Form.Control onChange={this.changeTitle}/>
+                                    <Form.Control as="select" onChange={this.changeTitle}>
+                                        <option>Naprawa gwarancyjna</option>
+                                        <option>Naprawa pogwarancyjna</option>
+                                        <option>Wymiana podzespołów</option>
+                                        <option>Instalowanie oprogramowania</option>
+                                        <option>Inne</option>
+                                    </Form.Control>
+                                    {crashTypeInputField}
                                 </Form.Group>
 
                                 <Form.Group controlId="exampleForm.ControlTextarea1">
@@ -234,6 +266,7 @@ class AddComputerCrash extends Component{
                         </div>
                         
                     </div>
+                    <br/><br/>
                     <div className="centered">
                         <Button variant="danger" onClick={(e)=>{this.setState({redirect:true})}} style={{'margin-right':"30px"}}>Anuluj</Button>
                         <Button variant="success" onClick={this.add}>Utwórz</Button>

@@ -60,7 +60,7 @@ public class StaffController {
                 errorsList.add("Musisz podać adres email lub numer telefonu klienta!");
             }
             if(form.getEmail()!=null && clientRepository.existsByEmail(form.getEmail())){
-                errorsList.add("Klient o takim e-mailu już istnieje! Wybierz klienta z listy!!");
+                errorsList.add("Klient o takim e-mailu już istnieje! Wybierz klienta z listy!");
             }
 
             if(errorsList.size()>0) {
@@ -95,7 +95,7 @@ public class StaffController {
         crashToAdd.setTitle(form.getTitle());
         crashToAdd.setDescription(form.getDescription());
         crashToAdd.setDate(new Date());
-        crashToAdd.setStatus("PRZYJĘTA");
+        crashToAdd.setStatus("Przyjęta");
 
         ComputerCrash createdCrash = computerCrashRepository.save(crashToAdd);
 
