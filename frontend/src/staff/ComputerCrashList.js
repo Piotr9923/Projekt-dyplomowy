@@ -32,6 +32,7 @@ class ComputerCrashList extends Component{
             filteredData:[],
             filterClient:"",
             filterType:"",
+            filterStatus:"",
             filterActive: true
         };
     }
@@ -65,7 +66,9 @@ class ComputerCrashList extends Component{
                 if(crash.status!="Zakończona"){
                     if(crash.client.toUpperCase().includes(this.state.filterClient.toUpperCase())){
                         if(crash.type.includes(this.state.filterType)){
-                            filtered.push(crash);
+                            if(crash.status.includes(this.state.filterStatus)){
+                                filtered.push(crash);
+                            }
                         }
                     }
                 }
@@ -73,7 +76,9 @@ class ComputerCrashList extends Component{
             else{
                 if(crash.client.toUpperCase().includes(this.state.filterClient.toUpperCase())){
                     if(crash.type.includes(this.state.filterType)){
-                        filtered.push(crash);
+                        if(crash.status.includes(this.state.filterStatus)){
+                            filtered.push(crash);
+                        }
                     }
                 }
             }
@@ -96,16 +101,83 @@ class ComputerCrashList extends Component{
         }
     }
 
-    FilterPanel=()=>{
+    changeFilterStatus=(e)=>{
+        if(e.target.value.includes("Wszystkie")){
+            this.setState({filterStatus:""})
+        }
+        else{
+            this.setState({filterStatus: e.target.value})
+        }
 
+    }
+
+    getFilterOptions=()=>{
+        var statusOptions =  <><option>Wszystkie</option>
+        <option>Przyjęta</option>
+        <option>Zgłoszona</option>
+        <option>W trakcie naprawy</option>
+        <option>Gotowa do odbioru</option>
+        <option>Nie nadaje się do naprawy</option></>;
+
+        if(this.state.filterActive==false){
+            statusOptions =  <><option>Wszystkie</option>
+            <option>Przyjęta</option>
+            <option>Zgłoszona</option>
+            <option>W trakcie naprawy</option>
+            <option>Gotowa do odbioru</option>
+            <option>Nie nadaje się do naprawy</option>
+            <option>Zakończona</option></>
+        }
+
+        if(this.state.filterType.includes("HOME")){
+            statusOptions = <><option>Wszystkie</option>
+            <option>Zgłoszona</option>
+            <option>W trakcie naprawy</option></>
+
+            if(this.state.filterActive==false){
+                statusOptions = <><option>Wszystkie</option>
+                <option>Zgłoszona</option>
+                <option>W trakcie naprawy</option>
+                <option>Zakończona</option></>
+            }
+        }
+        else{
+
+            var statusOptions =  <><option>Wszystkie</option>
+            <option>Przyjęta</option>
+            <option>W trakcie naprawy</option>
+            <option>Gotowa do odbioru</option>
+            <option>Nie nadaje się do naprawy</option></>;
+
+            if(this.state.filterActive==false){
+                statusOptions =  <><option>Wszystkie</option>
+                <option>Przyjęta</option>
+                <option>W trakcie naprawy</option>
+                <option>Gotowa do odbioru</option>
+                <option>Nie nadaje się do naprawy</option>
+                <option>Zakończona</option></>
+            }
+
+        }
+        return statusOptions;
+    }
+
+    FilterPanel=()=>{
+        
+        var statusOptions = this.getFilterOptions();
         return (
             <div className="centered" style={{backgroundColor:"#D3D3D3"}}>
                 <input placeholder="Dane klienta" style={{'margin-right':"30px"}} onChange={(e)=>{this.setState({filterClient:e.target.value})}}></input>
-                <Form.Control as="select" style={{width:"13%",'margin-right':"30px"}} onChange={this.changeFilterType}>
+                {'Typ:'}<Form.Control as="select" style={{width:"13%",'margin-right':"30px"}} onChange={this.changeFilterType}>
                     <option>Wszystkie</option>
                     <option>Serwis</option>
                     <option>Awaria domowa</option>
                 </Form.Control>
+
+                {'Status:'}<Form.Control as="select" style={{width:"20%",'margin-right':"30px"}} onChange={this.changeFilterStatus}>
+                    {statusOptions}
+                </Form.Control>
+
                 <Form.Check inline label="W trakcie naprawy" defaultChecked="true" type="checkbox" style={{'margin-right':"30px"}} onClick={()=>{this.setState({filterActive:!this.state.filterActive})}}/>
                 <Button variant="dark" onClick={this.filter} style={{'margin-right':"30px"}}>Filtruj</Button>
             </div>
