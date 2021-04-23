@@ -5,6 +5,8 @@ import AdminHeader from './AdminHeader';
 import {
     CircularProgress
   } from "@material-ui/core";
+  import {Delete, Edit} from"@material-ui/icons"
+
 
 class StaffInfo extends Component{
     constructor(props) {
@@ -42,15 +44,19 @@ class StaffInfo extends Component{
 
     StaffView=()=>{
 
-        return(
-            <div>
-            <AdminHeader/>
-                Imię: {this.state.info.firstname}<br/>
-                Nazwisko: {this.state.info.lastname}<br/>
-                Login: {this.state.info.username}<br/>
-                Telefon: {this.state.info.phoneNumber}<br/>
-                Adres e-mail: {this.state.info.email}<br/>
-                Wysokość wynagrodzenia: {this.state.info.salary}<br/>
+        return( 
+            <div style={{display:"table",margin:"0 auto"}}>
+               <Link to={"/admin/staff/"+this.props.match.params.id+"/edit"}><Edit fontSize="large"/></Link>
+                <h2>Dane pracownika:</h2>
+                
+                <ul style={{listStyle:"none"}}>
+                    <li><b>Imię:</b> {this.state.info.firstname}</li>
+                    <li><b>Nazwisko:</b> {this.state.info.lastname}</li>
+                    <li><b>Login:</b> {this.state.info.username}</li>
+                    <li><b>Telefon:</b> {this.state.info.phoneNumber}</li>
+                    <li><b>Adres e-mail:</b> {this.state.info.email}</li>
+                    <li><b>Wysokość wynagrodzenia:</b> {this.state.info.salary} zł</li>
+                </ul>
             </div>
             
         )
@@ -62,7 +68,7 @@ class StaffInfo extends Component{
         var info = <this.StaffView/>
 
         if(this.state.notFound){
-            info = <div>Nie znaleziono takiego pracownika!</div>
+            return(<div><AdminHeader/><br/><h2 className="centered" style={{color:"red"}}>Nie znaleziono takiego pracownika</h2></div>)
         }
         else if(this.state.isLoading){
             info = <div class="centered"><CircularProgress/></div>

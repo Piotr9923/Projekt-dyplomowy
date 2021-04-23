@@ -205,7 +205,7 @@ class EditComputerCrash extends Component{
     render() {
 
         if(this.state.notFound){
-            return(<div><StaffHeader/><br/>Nie znaleziono takiej awarii</div>)
+            return(<div><StaffHeader/><br/><h2 className="centered" style={{color:"red"}}>Nie znaleziono takiej awarii</h2></div>)
         }
         else if(this.state.isLoading){
             return(<div><StaffHeader/><div class="centered"><CircularProgress/></div></div>)

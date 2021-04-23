@@ -147,11 +147,7 @@ public class StaffController {
     public ResponseEntity getCrash(@PathVariable int id){
 
         if(computerCrashRepository.existsById(id)==false){
-            List<String> errorsList = new ArrayList<>();
-            errorsList.add("Awaria o takim id nie istnieje!");
-            Map<String,List<String>> errors = new HashMap<String,List<String>>();
-            errors.put("errors",errorsList);
-            return ResponseEntity.badRequest().body(errors);
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(computerCrashRepository.getById(id));
@@ -261,11 +257,7 @@ public class StaffController {
     public ResponseEntity getHomeCrash(@PathVariable int id){
 
         if(homeCrashRepository.existsById(id)==false){
-            List<String> errorsList = new ArrayList<>();
-            errorsList.add("Awaria o takim id nie istnieje!");
-            Map<String,List<String>> errors = new HashMap<String,List<String>>();
-            errors.put("errors",errorsList);
-            return ResponseEntity.badRequest().body(errors);
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(homeCrashRepository.getById(id));

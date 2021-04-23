@@ -44,12 +44,14 @@ class AnnouncementInfo extends Component{
     AnnouncementView=()=>{
 
         return(
-            <div>
-            Data opublikowania: {this.state.info.date}<br/>
-            Tytuł: {this.state.info.title}<br/>
-            Treść:<br/> 
-            <text style={{ whiteSpace: "pre" }}>{this.state.info.text}</text><br/>
-            Odbiorcy: {this.state.info.rolesNames}<br/>
+            <div style={{display:"table",margin:"0 auto"}}>
+            <h1><b>{this.state.info.title}</b></h1>
+            <text style={{ whiteSpace: "pre" }}>{this.state.info.text}</text><br/><br/><br/>
+
+            <b>Odbiorcy:</b> {this.state.info.rolesNames}<br/><br/>
+
+            <b>Data publikacji:</b> {this.state.info.date}
+
         </div>
 
         )

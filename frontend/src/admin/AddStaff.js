@@ -1,8 +1,12 @@
-import { Button, Checkbox } from '@material-ui/core';
+import {Checkbox } from '@material-ui/core';
 import React, {Component} from 'react'
 import {Link, Redirect} from 'react-router-dom'
 import ApiConnect from '../public/ApiConnect';
 import AdminHeader from './AdminHeader';
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../App.css';
 
 class AddStaff extends Component{
     constructor(props) {
@@ -161,23 +165,61 @@ class AddStaff extends Component{
                 <div>
                     <AdminHeader/>
 
-                    <form onSubmit={this.add}>
-                    <h2>Dane osobowe:</h2><br/>
-                    Imię: <input type="text" defaultValue={this.state.firstname} onChange={this.changeFirstname}/><br/>
-                    Nazwisko: <input type="text" defaultValue={this.state.lastname} onChange={this.changeLastname}/><br/>
-                    Numer telefonu: <input type="text" defaultValue={this.state.phoneNumber} onChange={this.changePhoneNumber}/><br/>
-                    Email: <input type="text" defaultValue={this.state.email} onChange={this.changeEmail}/><br/>
-                    Wysokość wynagrodzenia: <input type="text" defaultValue={this.state.salary} onChange={this.changeSalary}/><br/>
-                    <h2>Dane użytkownika:</h2><br/>
-                    Nazwa użytkownika: <input type="text" defaultValue={this.state.username} onChange={this.changeUsername}/><br/>
-                    Hasło: <input type="password" onChange={this.changePassword}/><br/>
-                    Podaj ponownie hasło: <input type="password" onChange={this.changePassword2}/><br/>
+                    <div style={{width:"50%",margin:"auto", display:"inline-block", 'padding-left':'20px','padding-right':'20px'}}>
+                        <Form className='center' style={{width:"50%",margin:"auto"}} onSubmit={this.add}>
+                        <h2>Dane osobowe:</h2>  
+                        <Form.Group controlId="addStaff.firstname">
+                            <Form.Label>Imię</Form.Label>
+                            <Form.Control onChange={this.changeFirstname}/>
+                        </Form.Group>
+                        <Form.Group controlId="addStaff.lastname">
+                            <Form.Label>Nazwisko</Form.Label>
+                            <Form.Control onChange={this.changeLastname}/>
+                        </Form.Group>
 
-                    <button type="button" onClick={(e)=>{this.setState({redirect:true})}}>Anuluj</button>
-                    <button type="submit">Utwórz</button>
-                </form>
+                        <Form.Group controlId="addStaff.phone">
+                            <Form.Label>Numer telefonu</Form.Label>
+                            <Form.Control onChange={this.changePhoneNumber}/>
+                        </Form.Group>
+
+                        <Form.Group controlId="addStaff.mail">
+                            <Form.Label>Adres e-mail</Form.Label>
+                            <Form.Control onChange={this.changeEmail}/>
+                        </Form.Group>
+
+                        <Form.Group controlId="addStaff.salart">
+                            <Form.Label>Wysokość wynagrodzenia</Form.Label>
+                            <Form.Control onChange={this.changeSalary}/>
+                        </Form.Group>
+                        </Form>
+                    </div>
+
+                    <div style={{width:"50%", display:"inline-block", 'padding-left':'20px','padding-right':'20px',"vertical-align":"top"}}>
+                    <Form className='center' style={{width:"50%",margin:"auto"}} onSubmit={this.add}>
+                        <h2>Dane użytkownika:</h2>  
+                        <Form.Group controlId="addStaff.firstname">
+                            <Form.Label>Nazwa użytkownika</Form.Label>
+                            <Form.Control onChange={this.changeUsername}/>
+                        </Form.Group>
+                        <Form.Group controlId="addStaff.lastname">
+                            <Form.Label>Hasło</Form.Label>
+                            <Form.Control type="password" onChange={this.changePassword}/>
+                        </Form.Group>
+
+                        <Form.Group controlId="addStaff.phone">
+                            <Form.Label>Powtórz hasło</Form.Label>
+                            <Form.Control type="password" onChange={this.changePassword2}/>
+                        </Form.Group>
+
+                    </Form>
+                    </div>
+                    <div className="centered">
+                        <Button variant="danger" onClick={(e)=>{this.setState({redirect:true})}} style={{'margin-right':"30px"}}>Anuluj</Button>
+                        <Button variant="success" onClick={this.add}>Utwórz</Button>
+                    </div>
                 </div>
             )
+
         }
 
     }

@@ -129,6 +129,10 @@ class ComputerCrashList extends Component{
             <option>Zakończona</option></>
         }
 
+        if(this.state.filterType==""){
+            return statusOptions;
+        }
+
         if(this.state.filterType.includes("HOME")){
             statusOptions = <><option>Wszystkie</option>
             <option>Zgłoszona</option>
