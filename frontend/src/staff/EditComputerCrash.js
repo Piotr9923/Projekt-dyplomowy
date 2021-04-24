@@ -254,7 +254,7 @@ class EditComputerCrash extends Component{
                         </Form>
                     </div>
 
-                    <div style={{width:"50%", display:"inline-block", 'padding-left':'60px','padding-right':'60px'}}>
+                    <div style={{width:"50%", display:"inline-block", 'padding-left':'60px','padding-right':'60px',"vertical-align":"top"}}>
                         <Form.Check 
                             type="switch"
                             id="custom-switch"

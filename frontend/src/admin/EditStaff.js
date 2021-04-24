@@ -215,7 +215,7 @@ class EditStaff extends Component{
         else{
             var editUserData=""
             if(this.state.editUserData){
-                editUserData =<Form className='center' style={{width:"50%",margin:"auto"}} onSubmit={this.add}>
+                editUserData =<Form className='center' style={{width:"50%"}} onSubmit={this.add}>
                 <h2>Dane użytkownika:</h2>  
                 <Form.Group controlId="addStaff.firstname">
                     <Form.Label>Nazwa użytkownika</Form.Label>
@@ -266,7 +266,7 @@ class EditStaff extends Component{
                         </Form>
                     </div>
 
-                    <div style={{width:"50%", display:"inline-block", 'padding-left':'20px','padding-right':'20px',"vertical-align":"top"}}>
+                    <div style={{width:"50%", display:"inline-block", margin:"auto", 'padding-left':'20px','padding-right':'20px',"vertical-align":"top"}}>
                     <Form.Check 
                             type="switch"
                             id="custom-switch"

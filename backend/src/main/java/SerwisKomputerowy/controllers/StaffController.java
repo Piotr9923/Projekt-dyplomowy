@@ -5,6 +5,7 @@ import SerwisKomputerowy.entity.ComputerCrash;
 import SerwisKomputerowy.entity.HomeComputerCrash;
 import SerwisKomputerowy.model.forms.ComputerCrashForm;
 import SerwisKomputerowy.model.forms.UpdateComputerCrashForm;
+import SerwisKomputerowy.model.response.ComputerCrashInfoResponse;
 import SerwisKomputerowy.model.response.ComputerCrashListResponse;
 import SerwisKomputerowy.repository.ClientRepository;
 import SerwisKomputerowy.repository.ComputerCrashRepository;
@@ -150,7 +151,21 @@ public class StaffController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(computerCrashRepository.getById(id));
+        ComputerCrash crash = computerCrashRepository.getById(id);
+        Client client = clientRepository.getClientById(crash.getClientId());
+
+        ComputerCrashInfoResponse response = new ComputerCrashInfoResponse();
+        response.setTitle(crash.getTitle());
+        response.setDescription(crash.getDescription());
+        response.setDate(crash.getDate());
+        response.setCrashMessage(crash.getCrashMessage());
+        response.setCost(crash.getCost());
+        response.setStatus(crash.getStatus());
+        response.setClientName(client.getFirstname()+" "+client.getLastname());
+        response.setClientEmail(client.getEmail());
+        response.setClientPhoneNumber(client.getPhoneNumber());
+
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/crash/{id}")
@@ -183,7 +198,7 @@ public class StaffController {
         }
 
         ComputerCrash crashToUpdate = computerCrashRepository.getById(id);
-
+        System.out.println(form.getCrashMessage());
         if(form.getDescription()!=null){
             crashToUpdate.setDescription(form.getDescription());
         }
@@ -216,7 +231,7 @@ public class StaffController {
             return ResponseEntity.badRequest().body(formErrors);
         }
 
-        if(computerCrashRepository.existsById(id)==false){
+        if(homeCrashRepository.existsById(id)==false){
             List<String> errorsList = new ArrayList<>();
             errorsList.add("Wystąpił błąd!");
             Map<String,List<String>> errorsMessage = new HashMap<String,List<String>>();
@@ -260,7 +275,23 @@ public class StaffController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(homeCrashRepository.getById(id));
+        HomeComputerCrash crash = homeCrashRepository.getById(id);
+        Client client = clientRepository.getClientById(crash.getClientId());
+
+        ComputerCrashInfoResponse response = new ComputerCrashInfoResponse();
+        response.setTitle(crash.getTitle());
+        response.setDescription(crash.getDescription());
+        response.setCrashMessage(crash.getCrashMessage());
+        response.setDate(crash.getDate());
+        response.setCost(crash.getCost());
+        response.setStatus(crash.getStatus());
+        response.setClientName(client.getFirstname()+" "+client.getLastname());
+        response.setClientEmail(client.getEmail());
+        response.setClientPhoneNumber(client.getPhoneNumber());
+        response.setClientStreet(crash.getStreet());
+        response.setClientAddress(crash.getCode()+" "+crash.getCity());
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/client")

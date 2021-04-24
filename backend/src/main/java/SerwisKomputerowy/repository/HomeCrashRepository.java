@@ -17,4 +17,5 @@ public interface HomeCrashRepository extends CrudRepository<HomeComputerCrash,In
 
     public List<HomeComputerCrash> findAll();
 
+
 }
