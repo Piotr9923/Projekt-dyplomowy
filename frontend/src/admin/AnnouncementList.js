@@ -16,6 +16,7 @@ import {
 import AnnouncementListElement from './AnnouncementListElement';
 import '../App.css';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { TablePagination } from '@material-ui/core';
 
 
 class AnnouncementList extends Component{

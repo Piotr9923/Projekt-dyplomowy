@@ -6,7 +6,7 @@ import {
     CircularProgress
   } from "@material-ui/core";
   import {Delete, Edit} from"@material-ui/icons"
-
+import '../App.css'
 
 class StaffInfo extends Component{
     constructor(props) {

@@ -73,7 +73,7 @@ class HomeCrashInfo extends Component{
             <div>
             <h3>Dane klienta:</h3>
             {this.state.info.clientName}<br/>
-            Nr tel.:{this.state.info.clientPhoneNumber}<br/>
+            Nr tel.: {this.state.info.clientPhoneNumber}<br/>
             Adres e-mail: {this.state.info.clientEmail}<br/><br/>
             <b>Adres naprawy:</b><br/>
             ul. {this.state.info.clientStreet}<br/>

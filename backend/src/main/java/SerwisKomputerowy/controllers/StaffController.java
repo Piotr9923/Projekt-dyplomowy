@@ -1,15 +1,15 @@
 package SerwisKomputerowy.controllers;
 
+import SerwisKomputerowy.entity.Announcement;
 import SerwisKomputerowy.entity.Client;
 import SerwisKomputerowy.entity.ComputerCrash;
 import SerwisKomputerowy.entity.HomeComputerCrash;
 import SerwisKomputerowy.model.forms.ComputerCrashForm;
 import SerwisKomputerowy.model.forms.UpdateComputerCrashForm;
+import SerwisKomputerowy.model.response.AnnouncementResponse;
 import SerwisKomputerowy.model.response.ComputerCrashInfoResponse;
 import SerwisKomputerowy.model.response.ComputerCrashListResponse;
-import SerwisKomputerowy.repository.ClientRepository;
-import SerwisKomputerowy.repository.ComputerCrashRepository;
-import SerwisKomputerowy.repository.HomeCrashRepository;
+import SerwisKomputerowy.repository.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -25,12 +25,16 @@ public class StaffController {
 
     private ClientRepository clientRepository;
     private ComputerCrashRepository computerCrashRepository;
-    public HomeCrashRepository homeCrashRepository;
+    private HomeCrashRepository homeCrashRepository;
+    private AnnouncementRepository announcementRepository;
+    private RoleRepository roleRepository;
 
-    public StaffController(ClientRepository clientRepository, ComputerCrashRepository computerCrashRepository, HomeCrashRepository homeCrashRepository) {
+    public StaffController(ClientRepository clientRepository, ComputerCrashRepository computerCrashRepository, HomeCrashRepository homeCrashRepository, AnnouncementRepository announcementRepository, RoleRepository roleRepository) {
         this.clientRepository = clientRepository;
         this.computerCrashRepository = computerCrashRepository;
         this.homeCrashRepository = homeCrashRepository;
+        this.announcementRepository = announcementRepository;
+        this.roleRepository = roleRepository;
     }
 
     @PostMapping("/crash")
@@ -198,7 +202,6 @@ public class StaffController {
         }
 
         ComputerCrash crashToUpdate = computerCrashRepository.getById(id);
-        System.out.println(form.getCrashMessage());
         if(form.getDescription()!=null){
             crashToUpdate.setDescription(form.getDescription());
         }
@@ -297,6 +300,50 @@ public class StaffController {
     @GetMapping("/client")
     public ResponseEntity<List<Client>> getClientList(){
         return ResponseEntity.ok(clientRepository.findAllByOrderByLastnameAscFirstnameAsc());
+    }
+
+    @GetMapping("/announcement")
+    public ResponseEntity getAnnouncementList(){
+
+        List<Announcement> announcementList = announcementRepository.findAllByOrderByDateDesc();
+
+        List<AnnouncementResponse> responseList = new ArrayList<>();
+
+        for(Announcement announcement: announcementList){
+
+            if(announcement.getRoles().contains(roleRepository.getByName("STAFF"))) {
+                AnnouncementResponse response = new AnnouncementResponse();
+
+                response.setText(announcement.getText());
+                response.setTitle(announcement.getTitle());
+                response.setDate(announcement.getDate());
+                response.setRolesNames(announcement.getRoles());
+                response.setId(announcement.getId());
+
+                responseList.add(response);
+            }
+        }
+
+        return ResponseEntity.ok(responseList);
+    }
+
+    @GetMapping("/announcement/{id}")
+    public ResponseEntity<AnnouncementResponse> getAnnouncement(@PathVariable int id){
+        Announcement announcement = announcementRepository.getById(id);
+        if(announcement==null){
+            return ResponseEntity.notFound().build();
+        }
+        if(!announcement.getRoles().contains(roleRepository.getByName("STAFF"))){
+            return ResponseEntity.notFound().build();
+        }
+        AnnouncementResponse response = new AnnouncementResponse();
+        response.setId(announcement.getId());
+        response.setTitle(announcement.getTitle());
+        response.setText(announcement.getText());
+        response.setRolesNames(announcement.getRoles());
+        response.setDate(announcement.getDate());
+
+        return ResponseEntity.ok(response);
     }
 
 

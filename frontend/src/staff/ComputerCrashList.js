@@ -5,6 +5,7 @@ import ComputerCrashListElement from './ComputerCrashListElement'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../App.css'
 
 import {
     Table,
@@ -33,7 +34,8 @@ class ComputerCrashList extends Component{
             filterClient:"",
             filterType:"",
             filterStatus:"",
-            filterActive: true
+            filterActive: true,
+            error: false
         };
     }
 
@@ -51,7 +53,10 @@ class ComputerCrashList extends Component{
             })
         }).then(this.filter)
         .catch(error=>{
-            alert("Wystąpił błąd!")
+            this.setState({
+                isLoading: false,
+                error:true
+            })
         })
 
     }
@@ -218,9 +223,14 @@ class ComputerCrashList extends Component{
     render() {
         
         var table = <this.ComputerCrashTable/>
+
         if(this.state.isLoading){
-            table = <div class="centered"><CircularProgress/></div>
+            table =  <div class="centered"><CircularProgress/></div>
         }
+        else if(this.state.error){
+            table = <h2 className="centered" style={{color:"red"}}>Nie można pobrać listy awarii! Spróbuj ponowanie później!</h2>
+        }
+
         return(
             <div>
                 
