@@ -34,11 +34,19 @@ import EditHomeCrash from './staff/EditHomeCrash';
 import ComputerCrashInfo from './staff/ComputerCrashInfo';
 import HomeCrashInfo from './staff/HomeCrashInfo';
 import AnnouncementView from './staff/AnnouncementView';
+import ClientHomePage from './client/ClientHomePage';
+import AnnouncementListView from './client/AnnouncementListView';
+import AnnouncementClientView from './client/AnnouncementClientView';
+import ClientCrashList from './client/ClientCrashList';
+import ClientCrashView from './client/ClientCrashView';
+import ClientHomeCrashView from './client/ClientHomeCrashView';
+import AddHomeCrash from './client/AddHomeCrash';
 
 
 function App() {
   return (
     <Router>
+
       <Route exact path="/" component={MainPage} />
       <UnloggedUserRoute path="/login" component={LoginPage} />
       <LoggedUserRoute path="/dashboard" component={ChooseMode}/>
@@ -53,11 +61,11 @@ function App() {
       <AdminRoute exact path="/admin/staff-list/add" component={AddStaff} />
       <AdminRoute exact path="/admin/staff/:id" component={StaffInfo} />
       <AdminRoute exact path="/admin/staff/:id/edit" component={EditStaff} />
-
       <AdminRoute exact path="/admin/announcement-list" component={AnnouncementList}/>
       <AdminRoute exact path="/admin/announcement-list/add" component={AddAnnouncement}/>
       <AdminRoute exact path="/admin/announcement/:id" component={AnnouncementInfo}/>
       
+
       <StaffRoute exact path="/staff" component={StaffHomePage}/>
       <StaffRoute exact path="/staff/crash-list" component={ComputerCrashList}/>
       <StaffRoute exact path="/staff/crash-list/add" component={AddComputerCrash}/>
@@ -66,6 +74,14 @@ function App() {
       <StaffRoute exact path="/staff/crash/:id" component={ComputerCrashInfo}/>
       <StaffRoute exact path="/staff/home-crash/:id" component={HomeCrashInfo}/>
       <StaffRoute exact path="/staff/announcement/:id" component={AnnouncementView} />
+
+
+      <ClientRoute exact path="/client" component={ClientHomePage} />
+      <ClientRoute exact path="/client/crash-list" component={ClientCrashList} />
+      <ClientRoute exact path="/client/announcement/:id" component={AnnouncementClientView} />
+      <ClientRoute exact path="/client/crash/:id" component={ClientCrashView} />
+      <ClientRoute exact path="/client/home-crash/:id" component={ClientHomeCrashView} />
+      <ClientRoute exact path="/client/crash-list/add" component={AddHomeCrash}/>
 
     </Router>
   )

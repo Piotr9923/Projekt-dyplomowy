@@ -16,5 +16,10 @@ public interface ComputerCrashRepository extends CrudRepository<ComputerCrash,In
 
     public List<ComputerCrash> getByClientId(int clientId);
 
+    public List<ComputerCrash> getByClientIdOrderByDate(int clientId);
+
     public List<ComputerCrash> findAll();
+
+    public List<ComputerCrash> findAllByOrderByDate();
+
 }

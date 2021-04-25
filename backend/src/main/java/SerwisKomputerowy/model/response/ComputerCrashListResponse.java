@@ -13,6 +13,7 @@ public class ComputerCrashListResponse {
     private String type;
     @JsonFormat(pattern="dd-MM-yyyy")
     private Date date;
+    private double cost;
 
     public ComputerCrashListResponse() {
     }
@@ -24,6 +25,24 @@ public class ComputerCrashListResponse {
         this.status = status;
         this.type = type;
         this.date = date;
+    }
+
+    public ComputerCrashListResponse(int id, String title, String client, String status, String type, Date date, double cost) {
+        this.id = id;
+        this.title = title;
+        this.client = client;
+        this.status = status;
+        this.type = type;
+        this.date = date;
+        this.cost = cost;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
     }
 
     public int getId() {

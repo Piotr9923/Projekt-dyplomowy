@@ -1,5 +1,6 @@
 package SerwisKomputerowy.repository;
 
+import SerwisKomputerowy.entity.ComputerCrash;
 import SerwisKomputerowy.entity.HomeComputerCrash;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -15,7 +16,10 @@ public interface HomeCrashRepository extends CrudRepository<HomeComputerCrash,In
 
     public List<HomeComputerCrash> getByClientId(int clientId);
 
+    public List<HomeComputerCrash> getByClientIdOrderByDate(int clientId);
+
     public List<HomeComputerCrash> findAll();
 
+    public List<HomeComputerCrash> findAllByOrderByDate();
 
 }

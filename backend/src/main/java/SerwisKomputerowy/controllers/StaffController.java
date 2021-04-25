@@ -65,7 +65,7 @@ public class StaffController {
             if((form.getEmail()==null || form.getEmail().isBlank()) && (form.getPhoneNumber()==null || form.getPhoneNumber().isBlank())){
                 errorsList.add("Musisz podać adres email lub numer telefonu klienta!");
             }
-            if(form.getEmail()!=null && clientRepository.existsByEmail(form.getEmail())){
+            if(form.getEmail()!=null && !form.getEmail().isBlank() && clientRepository.existsByEmail(form.getEmail())){
                 errorsList.add("Klient o takim e-mailu już istnieje! Wybierz klienta z listy!");
             }
 
@@ -112,8 +112,8 @@ public class StaffController {
     @GetMapping("/crash")
     public ResponseEntity getCrashList(){
 
-        List<HomeComputerCrash> homeComputerCrashes = homeCrashRepository.findAll();
-        List<ComputerCrash> computerCrashes = computerCrashRepository.findAll();
+        List<HomeComputerCrash> homeComputerCrashes = homeCrashRepository.findAllByOrderByDate();
+        List<ComputerCrash> computerCrashes = computerCrashRepository.findAllByOrderByDate();
 
         List<ComputerCrashListResponse> crashes = new ArrayList<>();
 

@@ -1,13 +1,14 @@
 package SerwisKomputerowy.controllers;
 
+import SerwisKomputerowy.entity.Announcement;
 import SerwisKomputerowy.entity.Client;
 import SerwisKomputerowy.entity.ComputerCrash;
 import SerwisKomputerowy.entity.HomeComputerCrash;
 import SerwisKomputerowy.model.forms.HomeCrashForm;
-import SerwisKomputerowy.repository.ClientRepository;
-import SerwisKomputerowy.repository.ComputerCrashRepository;
-import SerwisKomputerowy.repository.HomeCrashRepository;
-import SerwisKomputerowy.repository.UserRepository;
+import SerwisKomputerowy.model.response.AnnouncementResponse;
+import SerwisKomputerowy.model.response.ComputerCrashInfoResponse;
+import SerwisKomputerowy.model.response.ComputerCrashListResponse;
+import SerwisKomputerowy.repository.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
@@ -26,12 +27,16 @@ public class ClientController {
     private UserRepository userRepository;
     private HomeCrashRepository homeCrashRepository;
     private ComputerCrashRepository computerCrashRepository;
+    private AnnouncementRepository announcementRepository;
+    private RoleRepository roleRepository;
 
-    public ClientController(ClientRepository clientRepository, UserRepository userRepository, HomeCrashRepository homeCrashRepository, ComputerCrashRepository computerCrashRepository) {
+    public ClientController(ClientRepository clientRepository, UserRepository userRepository, HomeCrashRepository homeCrashRepository, ComputerCrashRepository computerCrashRepository, AnnouncementRepository announcementRepository, RoleRepository roleRepository) {
         this.clientRepository = clientRepository;
         this.userRepository = userRepository;
         this.homeCrashRepository = homeCrashRepository;
         this.computerCrashRepository = computerCrashRepository;
+        this.announcementRepository = announcementRepository;
+        this.roleRepository = roleRepository;
     }
 
     @GetMapping("/home_crash")
@@ -112,17 +117,25 @@ public class ClientController {
 
         Client loggedClient = clientRepository.getClientByUserId(userRepository.findByUsername(username).getId());
 
-        HomeComputerCrash computerCrash = homeCrashRepository.getById(id);
-
-        if(computerCrash==null || loggedClient.getId()!=computerCrash.getClientId()){
-            List<String> errorsList = new ArrayList<>();
-            errorsList.add("To nie jest Twoja awaria komputera!");
-            Map<String,List<String>> errors = new HashMap<String,List<String>>();
-            errors.put("errors",errorsList);
-            return ResponseEntity.badRequest().body(errors);
+        if(homeCrashRepository.existsById(id)==false){
+            return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(computerCrash);
+        HomeComputerCrash crash = homeCrashRepository.getById(id);
+
+        if(loggedClient.getId()!=crash.getClientId()){
+            return ResponseEntity.notFound().build();
+        }
+
+        ComputerCrashInfoResponse response = new ComputerCrashInfoResponse();
+        response.setTitle(crash.getTitle());
+        response.setDescription(crash.getDescription());
+        response.setDate(crash.getDate());
+        response.setCrashMessage(crash.getCrashMessage());
+        response.setCost(crash.getCost());
+        response.setStatus(crash.getStatus());
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/crash")
@@ -132,7 +145,34 @@ public class ClientController {
         int userId = userRepository.findByUsername(loggedUser).getId();
         int clientId = clientRepository.getClientByUserId(userId).getId();
 
-        return ResponseEntity.ok(computerCrashRepository.getByClientId(clientId));
+        List<HomeComputerCrash> homeComputerCrashes = homeCrashRepository.getByClientIdOrderByDate(clientId);
+        List<ComputerCrash> computerCrashes = computerCrashRepository.getByClientIdOrderByDate(clientId);
+
+        List<ComputerCrashListResponse> crashes = new ArrayList<>();
+
+        for (HomeComputerCrash homeComputerCrash : homeComputerCrashes) {
+            crashes.add(new ComputerCrashListResponse
+                    (homeComputerCrash.getId(),
+                            homeComputerCrash.getTitle(),
+                            "",
+                            homeComputerCrash.getStatus(),
+                            "HOME",
+                            homeComputerCrash.getDate(),
+                            homeComputerCrash.getCost()));
+        }
+
+        for (ComputerCrash computerCrash : computerCrashes) {
+            crashes.add(
+                    new ComputerCrashListResponse(computerCrash.getId(),
+                            computerCrash.getTitle(),
+                            "",
+                            computerCrash.getStatus(),
+                            "SERVICE",
+                            computerCrash.getDate(),
+                            computerCrash.getCost()));
+        }
+
+        return ResponseEntity.ok(crashes);
     }
 
     @GetMapping("crash/{id}")
@@ -142,17 +182,69 @@ public class ClientController {
 
         Client loggedClient = clientRepository.getClientByUserId(userRepository.findByUsername(username).getId());
 
-        ComputerCrash computerCrash = computerCrashRepository.getById(id);
-
-        if(computerCrash==null || loggedClient.getId()!=computerCrash.getClientId()){
-            List<String> errorsList = new ArrayList<>();
-            errorsList.add("To nie jest Twoja awaria komputera!");
-            Map<String,List<String>> errors = new HashMap<String,List<String>>();
-            errors.put("errors",errorsList);
-            return ResponseEntity.badRequest().body(errors);
+        if(computerCrashRepository.existsById(id)==false){
+            return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(computerCrash);
+        ComputerCrash crash = computerCrashRepository.getById(id);
+
+        if(loggedClient.getId()!=crash.getClientId()){
+            return ResponseEntity.notFound().build();
+        }
+
+        ComputerCrashInfoResponse response = new ComputerCrashInfoResponse();
+        response.setTitle(crash.getTitle());
+        response.setDescription(crash.getDescription());
+        response.setDate(crash.getDate());
+        response.setCrashMessage(crash.getCrashMessage());
+        response.setCost(crash.getCost());
+        response.setStatus(crash.getStatus());
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/announcement")
+    public ResponseEntity getAnnouncementList(){
+
+        List<Announcement> announcementList = announcementRepository.findAllByOrderByDateDesc();
+
+        List<AnnouncementResponse> responseList = new ArrayList<>();
+
+        for(Announcement announcement: announcementList){
+
+            if(announcement.getRoles().contains(roleRepository.getByName("CLIENT"))) {
+                AnnouncementResponse response = new AnnouncementResponse();
+
+                response.setText(announcement.getText());
+                response.setTitle(announcement.getTitle());
+                response.setDate(announcement.getDate());
+                response.setRolesNames(announcement.getRoles());
+                response.setId(announcement.getId());
+
+                responseList.add(response);
+            }
+        }
+
+        return ResponseEntity.ok(responseList);
+    }
+
+    @GetMapping("/announcement/{id}")
+    public ResponseEntity<AnnouncementResponse> getAnnouncement(@PathVariable int id){
+        Announcement announcement = announcementRepository.getById(id);
+        if(announcement==null){
+            return ResponseEntity.notFound().build();
+        }
+        if(!announcement.getRoles().contains(roleRepository.getByName("CLIENT"))){
+            return ResponseEntity.notFound().build();
+        }
+        AnnouncementResponse response = new AnnouncementResponse();
+        response.setId(announcement.getId());
+        response.setTitle(announcement.getTitle());
+        response.setText(announcement.getText());
+        response.setRolesNames(announcement.getRoles());
+        response.setDate(announcement.getDate());
+
+        return ResponseEntity.ok(response);
     }
 
 
