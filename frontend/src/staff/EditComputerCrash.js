@@ -43,7 +43,7 @@ class EditComputerCrash extends Component{
         this.setState({
             status: e.target.value
         })
-        if(e.target.value == "Gotowa do odbioru" || e.target.value == "Nie nadaje się do naprawy"){
+        if(e.target.value == "Gotowa do odbioru" || e.target.value == "Nie nadaje się do naprawy" || e.target.value == "Zakończona"){
             this.setState({
                 editCost: true
             })

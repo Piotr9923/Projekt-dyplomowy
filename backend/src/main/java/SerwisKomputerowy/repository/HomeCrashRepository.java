@@ -2,6 +2,7 @@ package SerwisKomputerowy.repository;
 
 import SerwisKomputerowy.entity.ComputerCrash;
 import SerwisKomputerowy.entity.HomeComputerCrash;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,5 +22,8 @@ public interface HomeCrashRepository extends CrudRepository<HomeComputerCrash,In
     public List<HomeComputerCrash> findAll();
 
     public List<HomeComputerCrash> findAllByOrderByDate();
+
+    @Query(value = "SELECT SUM(c.cost) FROM home_crash c where c.status='Zakończona'")
+    public double getIncome();
 
 }

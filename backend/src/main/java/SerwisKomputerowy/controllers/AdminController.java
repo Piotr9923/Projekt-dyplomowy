@@ -8,10 +8,7 @@ import SerwisKomputerowy.model.forms.AnnouncementForm;
 import SerwisKomputerowy.model.forms.StaffEditForm;
 import SerwisKomputerowy.model.forms.StaffForm;
 import SerwisKomputerowy.model.response.AnnouncementResponse;
-import SerwisKomputerowy.repository.AnnouncementRepository;
-import SerwisKomputerowy.repository.RoleRepository;
-import SerwisKomputerowy.repository.StaffRepository;
-import SerwisKomputerowy.repository.UserRepository;
+import SerwisKomputerowy.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,16 +28,19 @@ public class AdminController {
     private RoleRepository roleRepository;
     private StaffRepository staffRepository;
     private AnnouncementRepository announcementRepository;
+    private ComputerCrashRepository computerCrashRepository;
+    private HomeCrashRepository homeCrashRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
-    public AdminController(UserRepository userRepository, RoleRepository roleRepository, StaffRepository staffRepository, AnnouncementRepository announcementRepository) {
+    public AdminController(UserRepository userRepository, RoleRepository roleRepository, StaffRepository staffRepository, AnnouncementRepository announcementRepository, ComputerCrashRepository computerCrashRepository, HomeCrashRepository homeCrashRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.staffRepository = staffRepository;
         this.announcementRepository = announcementRepository;
+        this.computerCrashRepository = computerCrashRepository;
+        this.homeCrashRepository = homeCrashRepository;
     }
 
     @PostMapping("/staff")
@@ -67,7 +67,7 @@ public class AdminController {
         User userToCreate = form.getUser();
         userToCreate.addRole(staffRole);
 
-        //TODO: Hashowanie hasła
+        userToCreate.setPassword(passwordEncoder.encode(userToCreate.getPassword()));
 
         User createdUser = userRepository.save(userToCreate);
 
@@ -113,7 +113,7 @@ public class AdminController {
             updatedUser.setUsername(form.getUsername());
         }
         if(form.getPassword()!=null){
-            updatedUser.setPassword(form.getPassword());
+            updatedUser.setPassword(passwordEncoder.encode(form.getPassword()));
         }
         if(form.getFirstname()!=null){
             updatedStaff.setFirstname(form.getFirstname());
@@ -270,6 +270,19 @@ public class AdminController {
         announcementRepository.deleteById(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/statistic")
+    public ResponseEntity getStatistics(){
+
+        double serviceIncome = computerCrashRepository.getIncome();
+
+        double homeIncome = homeCrashRepository.getIncome();
+
+        double totalIncome = serviceIncome + homeIncome;
+
+
+        return ResponseEntity.ok().build();
     }
 
 

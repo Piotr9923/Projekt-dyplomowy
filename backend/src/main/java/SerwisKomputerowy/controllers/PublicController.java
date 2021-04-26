@@ -46,11 +46,6 @@ public class PublicController {
         this.roleRepository = roleRepository;
     }
 
-    @GetMapping
-    public String showDashboard(){
-        return "test";
-    }
-
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@RequestBody @Valid LoginForm form, Errors errors){
 
@@ -64,13 +59,12 @@ public class PublicController {
             return ResponseEntity.badRequest().body(formErrors);
         }
 
-        //TODO: Porównywanie hashowanego hasła
         if(userRepository.existsByUsername(form.getUsername())==false){
             return ResponseEntity.status(401).build();
         }
         User user = userRepository.findByUsername(form.getUsername());
 
-        if(user.getPassword().equals(form.getPassword())==false){
+        if(passwordEncoder.matches(form.getPassword(),user.getPassword())==false){
             return ResponseEntity.status(401).build();
         }
 
@@ -133,10 +127,9 @@ public class PublicController {
         }
         Role clientRole = roleRepository.getByName("CLIENT");
 
-        //TODO: Hashowanie hasła
         User newUser = new User();
         newUser.setUsername(form.getUsername());
-        newUser.setPassword(form.getPassword());
+        newUser.setPassword(passwordEncoder.encode(form.getPassword()));
         newUser.addRole(clientRole);
         User createdUser = userRepository.save(newUser);
 
@@ -203,10 +196,9 @@ public class PublicController {
         }
         Role clientRole = roleRepository.getByName("CLIENT");
 
-        //TODO: Hashowanie hasła
         User newUser = new User();
         newUser.setUsername(form.getUsername());
-        newUser.setPassword(form.getPassword());
+        newUser.setPassword(passwordEncoder.encode(form.getPassword()));
         newUser.addRole(clientRole);
 
         User createdUser = userRepository.save(newUser);
