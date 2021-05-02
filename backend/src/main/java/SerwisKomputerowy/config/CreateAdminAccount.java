@@ -73,11 +73,13 @@ public class CreateAdminAccount implements CommandLineRunner {
             Staff adminStaff = new Staff();
             adminStaff.setUserId(admin.getId());
             adminStaff.setFirstname("Konto administratora");
+            adminStaff.setLastname("");
             staffRepository.save(adminStaff);
 
             Client adminClient = new Client();
             adminClient.setUserId(admin.getId());
             adminClient.setFirstname("Konto administratora");
+            adminClient.setLastname("");
             clientRepository.save(adminClient);
 
         }

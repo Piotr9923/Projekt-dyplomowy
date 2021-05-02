@@ -41,6 +41,8 @@ import ClientCrashList from './client/ClientCrashList';
 import ClientCrashView from './client/ClientCrashView';
 import ClientHomeCrashView from './client/ClientHomeCrashView';
 import AddHomeCrash from './client/AddHomeCrash';
+import ClientContact from './client/ClientContact';
+import Contact from './public/Contact';
 
 
 function App() {
@@ -54,7 +56,7 @@ function App() {
       <Route path="/registration/new" component={NewUserRegistration} />
       <Route path="/registration/client" component={ClientRegistration} />
       <Route path="/logout" component={Logout} />
-
+      <Route path="/contact" component={Contact} />
       
       <AdminRoute exact path="/admin" component={AdminHomePage} />
       <AdminRoute exact path="/admin/staff-list" component={StaffList} />
@@ -82,6 +84,7 @@ function App() {
       <ClientRoute exact path="/client/crash/:id" component={ClientCrashView} />
       <ClientRoute exact path="/client/home-crash/:id" component={ClientHomeCrashView} />
       <ClientRoute exact path="/client/crash-list/add" component={AddHomeCrash}/>
+      <ClientRoute exact path="/client/contact" component={ClientContact}/>
 
     </Router>
   )

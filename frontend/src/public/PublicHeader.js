@@ -18,6 +18,7 @@ class PublicHeader extends Component{
                             <Nav.Link href="/" style={{color:"white","margin-right":"50px"}}>Strona główna</Nav.Link>
                             <Nav.Link href="/login" style={{color:"white","margin-right":"50px"}}>Zaloguj się</Nav.Link>
                             <Nav.Link href="/registration" style={{color:"white","margin-right":"50px"}}>Zarejestruj się</Nav.Link>
+                            <Nav.Link href="/contact" style={{color:"white","margin-right":"50px"}}>Kontakt</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

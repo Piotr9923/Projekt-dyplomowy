@@ -24,6 +24,8 @@ class ClientHeader extends Component{
                             <Nav.Link href="/client" style={{color:"white","margin-right":"50px"}}>Strona główna</Nav.Link>
                             <Nav.Link href="/client/crash-list" style={{color:"white","margin-right":"50px"}}>Moje awarie</Nav.Link>
                             <Nav.Link href="/client/crash-list/add" style={{color:"white","margin-right":"50px"}}>Zgłoś awarię domową</Nav.Link>
+                            <Nav.Link href="/client/contact" style={{color:"white","margin-right":"50px"}}>Kontakt</Nav.Link>
+
                         </Nav>
                     </Navbar.Collapse>
                     <Navbar.Collapse className="justify-content-end">
