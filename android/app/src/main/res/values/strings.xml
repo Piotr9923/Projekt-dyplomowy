@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">AplikacjaSerwisKomputerowy</string>
+    <string name="serverUrl" translatable="false">http://10.0.2.2:8080</string>
+    <string-array name="crash_titles">
+        <item>Naprawa gwarancyjna</item>
+        <item>Naprawa pogwarancyjna</item>
+        <item>Wymiana podzespołów</item>
+        <item>Instalacja oprogramowania</item>
+        <item>Inne</item>
+    </string-array>
 </resources>

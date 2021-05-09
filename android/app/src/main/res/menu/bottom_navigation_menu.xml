@@ -3,13 +3,15 @@
     <item
         android:id="@+id/page_1"
         android:enabled="true"
-        android:title="Strona głóœna"
+        android:title="Strona główna"
         android:icon="@mipmap/ic_launcher"/>
+
     <item
         android:id="@+id/page_2"
         android:enabled="true"
         android:title="Moje awarie"
         android:icon="@mipmap/ic_launcher"/>
+
     <item
         android:id="@+id/page_3"
         android:enabled="true"

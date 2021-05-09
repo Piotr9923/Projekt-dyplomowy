@@ -13,10 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -45,7 +48,7 @@ public class LoginActivity extends Activity {
     Button login;
 
     private String username, password;
-    private String url = "http://10.0.2.2:8080/signin";
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,8 @@ public class LoginActivity extends Activity {
         usernameTF = this.findViewById(R.id.username);
         passwordTF = this.findViewById(R.id.password);
         login = this.findViewById(R.id.loginButton);
+
+        url = getString(R.string.serverUrl) + "/signin";
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,33 +92,50 @@ public class LoginActivity extends Activity {
                                 }
                                 Set<String> rolesSet = new HashSet();
 
+                                boolean isClient = false;
+
                                 for(int i=0;i<roles.length();i++){
                                     try {
                                         rolesSet.add(roles.getString(i));
+                                        if(roles.getString(i).equals("CLIENT")) isClient = true;
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
                                 }
 
+                                if(isClient) {
 
-                                SharedPreferences preferences = getSharedPreferences("session",MODE_PRIVATE);
-                                SharedPreferences.Editor edit = preferences.edit();
-                                edit.putString("token",token);
-                                edit.putStringSet("roles",rolesSet);
-                                edit.commit();
+                                    SharedPreferences preferences = getSharedPreferences("session", MODE_PRIVATE);
+                                    SharedPreferences.Editor edit = preferences.edit();
+                                    edit.putString("token", token);
+                                    edit.putStringSet("roles", rolesSet);
+                                    edit.commit();
 
-                                Intent intent = new Intent(LoginActivity.this, ClientDashboard.class);
-                                startActivity(intent);
-                                finish();
-
-
+                                    Intent intent = new Intent(LoginActivity.this, ClientDashboard.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                                else{
+                                    new AlertDialog.Builder(LoginActivity.this)
+                                            .setTitle("Nie jesteś klientem serwisu!")
+                                            .setMessage("").show();
+                                }
                             }
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        new AlertDialog.Builder(LoginActivity.this)
-                                .setTitle("Błędne dane logowania")
-                                .setMessage("").show();
+
+                        System.out.println(error);
+                        if (error instanceof AuthFailureError) {
+                            new AlertDialog.Builder(LoginActivity.this)
+                                    .setTitle("Błędne dane logowania!")
+                                    .setMessage("").show();
+                        }
+                        else{
+                            new AlertDialog.Builder(LoginActivity.this)
+                                    .setTitle("Wystąpił błąd! Spróbuj ponownie później!")
+                                    .setMessage("").show();
+                        }
                     }
                 });
 
