@@ -63,7 +63,7 @@
         android:layout_marginTop="35dp"
         android:ems="10"
         android:hint="Kod pocztowy"
-        android:inputType="number" />
+        android:inputType="phone" />
 
     <EditText
         android:id="@+id/crash_city"

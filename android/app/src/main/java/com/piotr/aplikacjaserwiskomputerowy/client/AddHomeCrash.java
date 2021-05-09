@@ -18,6 +18,7 @@ import android.widget.Spinner;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.ClientError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -32,6 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -160,6 +162,7 @@ public class AddHomeCrash extends AppCompatActivity {
                         response = new JSONObject(new String(error.networkResponse.data));
                         errors = response.getJSONArray("errors");
                     } catch (JSONException e) {
+
                         new AlertDialog.Builder(AddHomeCrash.this)
                                 .setTitle("Wystąpił błąd! Spróbuj ponownie później!")
                                 .setMessage("").show();
@@ -175,7 +178,6 @@ public class AddHomeCrash extends AppCompatActivity {
                     new AlertDialog.Builder(AddHomeCrash.this)
                             .setTitle("Błędnie uzupełnione pola!")
                             .setMessage(message).show();
-
                 }
                 else{
                     new AlertDialog.Builder(AddHomeCrash.this)
@@ -187,6 +189,19 @@ public class AddHomeCrash extends AppCompatActivity {
             @Override
             public String getBodyContentType() {
                 return "application/json; charset=utf-8";
+            }
+
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                try {
+                    if (response.data.length == 0) {
+                        byte[] responseData = "{}".getBytes("UTF8");
+                        response = new NetworkResponse(response.statusCode, responseData, response.headers, response.notModified);
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                return super.parseNetworkResponse(response);
             }
 
             @Override
