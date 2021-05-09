@@ -117,16 +117,6 @@ public class LoginActivity extends Activity {
                     }
                 });
 
-//                {
-//                    @Override
-//                    protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
-//                        int statusCode = response.statusCode;
-//
-//                        System.out.println("Status odpowiedzi: " + statusCode);
-//                        return super.parseNetworkResponse(response);
-//                    }
-//                }
-
                 queue.add(request);
 
             }

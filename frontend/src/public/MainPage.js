@@ -13,7 +13,7 @@ class MainPage extends Component{
             <div>
                 <PublicHeader />
 
-                <h1>Witaj na stronie naszego serwisu komputerowego!</h1>
+                <h1 style={{display: "flex","justify-content":"center","align-items":"center"}}>Witaj na stronie naszego serwisu komputerowego:</h1><br/>
                 
             </div>
         )
