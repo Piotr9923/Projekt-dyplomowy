@@ -3,19 +3,19 @@
     <item
         android:id="@+id/page_1"
         android:enabled="true"
-        android:title="Strona główna"
-        android:icon="@mipmap/ic_launcher"/>
+        android:title="Ogłoszenia"
+        android:icon="@drawable/announcement"/>
 
     <item
         android:id="@+id/page_2"
         android:enabled="true"
         android:title="Moje awarie"
-        android:icon="@mipmap/ic_launcher"/>
+        android:icon="@drawable/computer"/>
 
     <item
         android:id="@+id/page_3"
         android:enabled="true"
         android:title="Zgłoś awarię"
-        android:icon="@mipmap/ic_launcher"/>
+        android:icon="@drawable/add"/>
 
 </menu>

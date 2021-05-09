@@ -1,15 +1,12 @@
 package com.piotr.aplikacjaserwiskomputerowy.client;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -21,13 +18,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.bottomnavigation.BottomNavigationMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.piotr.aplikacjaserwiskomputerowy.LoginActivity;
 import com.piotr.aplikacjaserwiskomputerowy.R;
 import com.piotr.aplikacjaserwiskomputerowy.model.Announcement;
+import com.piotr.aplikacjaserwiskomputerowy.model.ComputerCrash;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,16 +30,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-public class ClientDashboard extends AppCompatActivity {
+public class ComputerCrashList extends AppCompatActivity {
 
     private ListView listView;
-    private AnnouncementListAdapter adapter;
-    private List<Announcement> list;
+    private ComputerCrashListAdapter adapter;
+    private List<ComputerCrash> list;
 
     @Override
     public void onBackPressed() {
@@ -53,7 +46,7 @@ public class ClientDashboard extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        ClientDashboard.super.onBackPressed();
+                        ComputerCrashList.super.onBackPressed();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -68,29 +61,28 @@ public class ClientDashboard extends AppCompatActivity {
 
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_client_dashboard);
+        setContentView(R.layout.activity_computer_crash_list);
 
         BottomNavigationView navigationView = findViewById(R.id.bottom_navigation);
-        navigationView.setSelectedItemId(R.id.page_1);
+        navigationView.setSelectedItemId(R.id.page_2);
         navigationView.setOnNavigationItemSelectedListener(NavListener.getNavListener(this,this));
 
-        listView = (ListView) findViewById(R.id.announcement_client_list);
+        listView = (ListView) findViewById(R.id.crash_list);
 
         list = new ArrayList<>();
 
-        loadAnnouncements();
-
+        loadCrashes();
 
     }
 
-    private void loadAnnouncements(){
+    private void loadCrashes(){
+        String url = getString(R.string.serverUrl) + "/client/crash";
 
-        String url = getString(R.string.serverUrl) + "/client/announcement";
-
-        RequestQueue queue = Volley.newRequestQueue(ClientDashboard.this);
+        RequestQueue queue = Volley.newRequestQueue(ComputerCrashList.this);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -99,19 +91,19 @@ public class ClientDashboard extends AppCompatActivity {
                 for(int i=0;i<response.length();i++){
                     try {
                         JSONObject object = response.getJSONObject(i);
-                        list.add(new Announcement(object.getInt("id"),object.getString("date"),object.getString("title"),object.getString("text")));
+                        list.add(new ComputerCrash(object.getInt("id"),object.getString("title"),object.getString("status"),object.getString("type"),object.getString("date"),object.getDouble("cost")));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-                showAnnouncements();
+                showCrashes();
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Toast.makeText(ClientDashboard.this,"Nie można pobrać ogłoszeń!",Toast.LENGTH_SHORT);
+                Toast.makeText(ComputerCrashList.this,"Nie można pobrać awarii!",Toast.LENGTH_SHORT);
 
             }
         }){
@@ -133,20 +125,18 @@ public class ClientDashboard extends AppCompatActivity {
 
     }
 
-    private void showAnnouncements(){
-        adapter = new AnnouncementListAdapter(getApplicationContext(), list);
+    private void showCrashes(){
+        adapter = new ComputerCrashListAdapter(getApplicationContext(), list);
 
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ClientDashboard.this,AnnouncementView.class);
-                intent.putExtra("id",(int)view.getTag());
+                Intent intent = new Intent(ComputerCrashList.this,CrashView.class);
+                intent.putExtra("url",(String)view.getTag());
                 startActivity(intent);
             }
         });
     }
-
-
 }

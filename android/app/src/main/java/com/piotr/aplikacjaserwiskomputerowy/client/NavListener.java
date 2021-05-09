@@ -26,7 +26,9 @@ public class NavListener {
                         activity.finish();
                         break;
                     case R.id.page_2:
-                        System.out.println("2222222222222");
+                        intent = new Intent(context,ComputerCrashList.class);
+                        activity.startActivity(intent);
+                        activity.finish();
                         break;
                     case R.id.page_3:
                         intent = new Intent(context,AddHomeCrash.class);

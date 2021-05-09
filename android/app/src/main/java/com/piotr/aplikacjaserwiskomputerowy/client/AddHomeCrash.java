@@ -148,7 +148,7 @@ public class AddHomeCrash extends AppCompatActivity {
                         new AlertDialog.Builder(AddHomeCrash.this)
                                 .setTitle("Poprawnie zgłoszono awarię!")
                                 .setMessage("").show();
-                        Intent intent = new Intent(AddHomeCrash.this,ClientDashboard.class);
+                        Intent intent = new Intent(AddHomeCrash.this,ComputerCrashList.class);
                         startActivity(intent);
                         finish();
                     }

@@ -102,6 +102,7 @@ public class StaffController {
         crashToAdd.setDescription(form.getDescription());
         crashToAdd.setDate(new Date());
         crashToAdd.setStatus("Przyjęta");
+        crashToAdd.setCrashMessage("");
 
         ComputerCrash createdCrash = computerCrashRepository.save(crashToAdd);
 
