@@ -9,7 +9,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button login, registration, aboutUs, exit;
+    Button login, registration, contact, exit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
         login = this.findViewById(R.id.login);
         registration = this.findViewById(R.id.registration);
-        aboutUs = this.findViewById(R.id.aboutUs);
+        contact = this.findViewById(R.id.contact);
         exit = this.findViewById(R.id.exit);
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -33,6 +33,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, RegistrationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ContactActivity.class);
                 startActivity(intent);
             }
         });

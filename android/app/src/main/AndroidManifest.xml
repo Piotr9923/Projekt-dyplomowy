@@ -13,31 +13,39 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".RegistrationActivity"
-            android:screenOrientation="portrait"
+        <activity android:name=".ContactActivity"></activity>
+        <activity
+            android:name=".RegistrationActivity"
             android:configChanges="keyboardHidden|orientation"
-            ></activity>
-        <activity android:name=".client.CrashView"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity android:name=".client.ComputerCrashList"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity android:name=".client.AnnouncementView"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation"/>
-        <activity android:name=".client.AddHomeCrash"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity android:name=".client.ClientDashboard"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity android:name=".LoginActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation" />
-        <activity android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation">
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".client.CrashView"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".client.ComputerCrashList"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".client.AnnouncementView"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".client.AddHomeCrash"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".client.ClientDashboard"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LoginActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
