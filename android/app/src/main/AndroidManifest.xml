@@ -13,13 +13,31 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".client.CrashView"></activity>
-        <activity android:name=".client.ComputerCrashList" />
-        <activity android:name=".client.AnnouncementView" />
-        <activity android:name=".client.AddHomeCrash" />
-        <activity android:name=".client.ClientDashboard" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".RegistrationActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
+            ></activity>
+        <activity android:name=".client.CrashView"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity android:name=".client.ComputerCrashList"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity android:name=".client.AnnouncementView"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"/>
+        <activity android:name=".client.AddHomeCrash"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity android:name=".client.ClientDashboard"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity android:name=".LoginActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
