@@ -22,7 +22,7 @@ class StaffInfo extends Component{
     componentDidMount() {
         this.setState({isLoading: true});
         var url = "/admin/staff/"+this.props.match.params.id;
-        console.log("URL = "+url);
+
         ApiConnect.getMethod(url).
         then(response => {
             if(response.status==404){

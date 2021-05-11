@@ -8,7 +8,10 @@ import SerwisKomputerowy.model.forms.AnnouncementForm;
 import SerwisKomputerowy.model.forms.StaffEditForm;
 import SerwisKomputerowy.model.forms.StaffForm;
 import SerwisKomputerowy.model.response.AnnouncementResponse;
+import SerwisKomputerowy.model.response.MonthlySum;
 import SerwisKomputerowy.repository.*;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -271,20 +274,5 @@ public class AdminController {
 
         return ResponseEntity.noContent().build();
     }
-
-    @GetMapping("/statistic")
-    public ResponseEntity getStatistics(){
-
-        double serviceIncome = computerCrashRepository.getIncome();
-
-        double homeIncome = homeCrashRepository.getIncome();
-
-        double totalIncome = serviceIncome + homeIncome;
-
-
-        return ResponseEntity.ok().build();
-    }
-
-
 
 }

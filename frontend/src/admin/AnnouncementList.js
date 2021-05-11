@@ -27,7 +27,7 @@ class AnnouncementList extends Component{
         
         this.state = {
             isLoading: true,
-            announcement:[],
+            announcement:[]
         };
     }
 
@@ -38,7 +38,6 @@ class AnnouncementList extends Component{
         ApiConnect.getMethod(url)
         .then(response=>response.json())
         .then(data=>{
-            console.log("TEST");
             this.setState({
                 isLoading: false,
                 announcement: data

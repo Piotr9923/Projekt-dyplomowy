@@ -43,6 +43,7 @@ import ClientHomeCrashView from './client/ClientHomeCrashView';
 import AddHomeCrash from './client/AddHomeCrash';
 import ClientContact from './client/ClientContact';
 import Contact from './public/Contact';
+import Statistics from './admin/Statistics';
 
 
 function App() {
@@ -66,7 +67,8 @@ function App() {
       <AdminRoute exact path="/admin/announcement-list" component={AnnouncementList}/>
       <AdminRoute exact path="/admin/announcement-list/add" component={AddAnnouncement}/>
       <AdminRoute exact path="/admin/announcement/:id" component={AnnouncementInfo}/>
-      
+      <AdminRoute exact path="/admin/statistics" component={Statistics}/>
+
 
       <StaffRoute exact path="/staff" component={StaffHomePage}/>
       <StaffRoute exact path="/staff/crash-list" component={ComputerCrashList}/>

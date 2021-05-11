@@ -26,4 +26,7 @@ public interface HomeCrashRepository extends CrudRepository<HomeComputerCrash,In
     @Query(value = "SELECT SUM(c.cost) FROM home_crash c where c.status='Zakończona'")
     public double getIncome();
 
+    @Query(value = "SELECT year(date), month(date),COUNT(*) FROM home_crash c GROUP BY year(date),month(date) ORDER BY year(date), month(date)")
+    public List<String> getMonthlySum();
+
 }

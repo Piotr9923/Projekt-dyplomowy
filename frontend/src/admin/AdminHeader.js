@@ -24,6 +24,7 @@ class AdminHeader extends Component{
                             {/* <Nav.Link href="/admin" style={{color:"white","margin-right":"50px"}}>Strona główna</Nav.Link> */}
                             <Nav.Link href="/admin/staff-list" style={{color:"white","margin-right":"50px"}}>Zarządzaj pracownikami</Nav.Link>
                             <Nav.Link href="/admin/announcement-list" style={{color:"white","margin-right":"50px"}}>Zarządzaj ogłoszeniami</Nav.Link>
+                            <Nav.Link href="/admin/statistics" style={{color:"white","margin-right":"50px"}}>Statystyki</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                     <Navbar.Collapse className="justify-content-end">
