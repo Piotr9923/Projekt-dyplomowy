@@ -56,7 +56,7 @@ class HomeCrashInfo extends Component{
 
             <b>Status:</b> {this.state.info.status}<br/>
 
-            <b>Do zapłaty:</b> {this.state.info.cost} zł<br/><br/>
+            {this.state.info.cost>0?<div><b>Do zapłaty:</b> {this.state.info.cost} zł<br/><br/></div>:""}
 
             <b>Wiadomość dla klienta: </b><br/>
             {this.state.info.crashMessage}
